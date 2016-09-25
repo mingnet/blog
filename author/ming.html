@@ -212,28 +212,6 @@
 		<p class="continue"><a href="/binary-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
-<article>
-	<h3><a href="/priority-queue-and-algorithm.html">优先队列和堆的笔记</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-07-04(星期一) 23:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>常见堆的概念有很多种，二叉堆、d堆、左式堆、斜堆、二项堆、斐波那契堆、pairing堆。大多应用于排序和优先队列中，优点是合并速度快(错误)，插入和获取最大或最小值的性能比较均衡。
-算法-c语言实现(第3版)中讲解了二叉堆和二项堆，算法导论(第3版)说明了二叉堆和斐波那契堆。
-除了二叉堆还经常可能用于排序以外，其它所有堆基本都是为优先队列设计的。着重于插入，查找最大值，合并的性能考量。</p>
-<h3 id="_1">二叉堆</h3>
-<p>堆是一颗完全树，同时满足每个节点均大于或小于它的子节点，这样的数据结构被称为最大堆或者最小堆。
-这种结构处于一种半排序状态，它的存取效率从整体上讲介于有序和无序之间。当对象处于动态时，是种非常有优势的数据结构。存取的时间复杂为log(a,n),其中a为完全树的度。</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">max_heap</span> <span class="o">*</span><span class="n">max_heap_pt</span><span class="p">;</span>
-<span class="k">struct</span> <span class="n">max_heap</span>
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">cur</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>  
-    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
-<p>通常二叉堆以数组存储，层为 log ...</p>
-		<p class="continue"><a href="/priority-queue-and-algorithm.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
 
 
         </div>
@@ -243,7 +221,7 @@
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">5</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">4</span></a></li>
                 </ul>
             </div>
 
