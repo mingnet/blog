@@ -1,0 +1,585 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://www.itzhai.com">IT 宅</a></li>
+							<li><a href="http://hedengcheng.com">何登成的技术博客</a></li>
+							<li><a href="http://www.raychase.net">四火的唠叨</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://blog.zhaojie.me">老赵点滴 - 追求编程之美</a></li>
+							<li><a href="http://dbanotes.net">Fenng</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>左倾堆的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">合并操作图解</a></li>
+<li><a href="#_2">完整源码</a></li>
+<li><a href="#_3">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>左倾堆(leftist tree 或 leftist heap)又称为左式堆，左偏树，左偏堆，最左堆等。左倾堆是优先队列的一种实现方式，当优先队列需要解决“两个优先队列合并”的问题时，二叉堆的效率就比较差了，这时左倾堆等方式可以很好的解决这类问题。左倾堆合并时间复杂度为O(lgn)。左倾堆在统计问题，最值问题，模拟问题和贪心问题等问题中有广泛的应用。
+左倾堆是二叉树，另外还有两个属性，键值和零距离。</p>
+<p><strong>键值</strong>用来比较节点的大小<br/>
+<strong>零距离</strong>(NPL)是 null path length 的缩写，指的是从该结点到达一个没有两个孩子的结点（一个或无孩子）的最短距离，叶节点的NPL为0, NULL的NPL为-1。</p>
+<p>左倾堆的性质</p>
+<ol>
+<li>节点的优先级大于或等于它子节点的优先级  </li>
+<li>任意节点左孩子的NPL &gt;= 右孩子的NPL  </li>
+<li>节点的NPL = 它的右孩子的NPL + 1  </li>
+</ol>
+<p>左倾堆的定义</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">leftist_heap_s</span> <span class="o">*</span><span class="n">leftist_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">leftist_heap_s</span> <span class="p">{</span>  
+    <span class="n">leftist_heap_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">right</span><span class="p">;</span>  
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span>  <span class="n">npl</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">leftist_heap_t</span><span class="p">;</span>
+</pre></div>
+<h3 id="_1"><strong> 合并操作图解 </strong></h3>
+<p>合并操作是左倾堆的重点。合并两个左倾堆的过程如下：</p>
+<ol>
+<li>如果一个空左倾堆与非空左倾堆合并，返回非空左倾堆</li>
+<li>如果两个左倾堆都非空，比较两个根节点，取优先级高的根节点为新的根节点。将“优先级较高堆的根节点的右孩子”和“优先级底的堆”进行合并</li>
+<li>如果新堆的右孩子的NPL &gt; 左孩子的NPL，则交换左右孩子</li>
+<li>设置新堆的根节点的NPL = 右子堆NPL + 1</li>
+</ol>
+<p>代码实现如下</p>
+<div class="highlight"><pre><span></span><span class="n">leftist_heap_pt</span> 
+<span class="nf">leftist_heap_merge</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">leftist_heap_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 保证h1的优先级大于h2 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">leftist_heap_merge</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">&gt;</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">npl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>流程如下图所示</p>
+<p><img alt="图一" src="/images/leftist_heap/merge1.png"/></p>
+<p><img alt="图二" src="/images/leftist_heap/merge2.png"/></p>
+<p><img alt="图三" src="/images/leftist_heap/merge3.png"/></p>
+<p><img alt="图四" src="/images/leftist_heap/merge4.png"/></p>
+<p><img alt="图五" src="/images/leftist_heap/merge5.png"/></p>
+<p><img alt="图六" src="/images/leftist_heap/merge6.png"/></p>
+<p><img alt="图七" src="/images/leftist_heap/merge7.png"/></p>
+<p><img alt="图八" src="/images/leftist_heap/merge8.png"/></p>
+<p><img alt="图九" src="/images/leftist_heap/merge9.png"/></p>
+<p><img alt="图十" src="/images/leftist_heap/merge10.png"/></p>
+<p><img alt="图十一" src="/images/leftist_heap/merge11.png"/></p>
+<p><img alt="图十二" src="/images/leftist_heap/merge12.png"/></p>
+<p><img alt="图十三" src="/images/leftist_heap/merge13.png"/></p>
+<h3 id="_2"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* leftist_heap.h */</span>
+<span class="cp">#ifndef LEFTIST_HEAP_H</span>
+<span class="cp">#define LEFTIST_HEAP_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">leftist_heap_s</span> <span class="o">*</span><span class="n">leftist_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">leftist_heap_s</span> <span class="p">{</span>  
+    <span class="n">leftist_heap_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">right</span><span class="p">;</span>  
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span>  <span class="n">npl</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">leftist_heap_t</span><span class="p">;</span>
+
+
+<span class="n">leftist_heap_pt</span> <span class="nf">leftist_heap_merge</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">leftist_heap_pt</span> <span class="n">h2</span><span class="p">);</span>
+<span class="n">leftist_heap_pt</span> <span class="nf">leftist_heap_push</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">leftist_heap_pt</span> <span class="nf">leftist_heap_pop</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">Item</span> <span class="nf">leftist_heap_top</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">leftist_heap_destroy</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">leftist_heap_print</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">leftist_heap_export_dot</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>leftist_heap.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* leftist_heap.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  leftist_heap.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  左倾堆实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-09-25 12:09</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"leftist_heap.h"</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">swap</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">p1</span><span class="p">,</span> <span class="n">leftist_heap_pt</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">leftist_heap_t</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> * 最小堆 ((a) &gt; (b))</span>
+<span class="cm"> * 最大堆 ({a} &lt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) &gt; (b)) </span><span class="cm">/* 最小堆 */</span><span class="cp"></span>
+
+<span class="n">leftist_heap_pt</span> 
+<span class="nf">leftist_heap_merge</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">leftist_heap_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 保证h1的优先级大于h2 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">leftist_heap_merge</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">&gt;</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">npl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">leftist_heap_pt</span> 
+<span class="nf">leftist_heap_push</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">node_pt</span><span class="p">;</span>
+    <span class="n">node_pt</span> <span class="o">=</span> <span class="p">(</span><span class="n">leftist_heap_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">leftist_heap_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node_pt</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node_pt</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node_pt</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node_pt</span><span class="o">-&gt;</span><span class="n">npl</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node_pt</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">leftist_heap_merge</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node_pt</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">leftist_heap_pt</span>
+<span class="nf">leftist_heap_pop</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">node_left_pt</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">node_right_pt</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">leftist_heap_merge</span><span class="p">(</span><span class="n">node_left_pt</span><span class="p">,</span> <span class="n">node_right_pt</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">leftist_heap_top</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">leftist_heap_destroy</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">leftist_heap_destroy</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">leftist_heap_destroy</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">leftist_heap_printnode</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">leftist_heap_show</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">leftist_heap_printnode</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">leftist_heap_show</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">leftist_heap_printnode</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+    <span class="n">leftist_heap_show</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">leftist_heap_print</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">leftist_heap_show</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d, xlabel=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">npl</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="cm">/* 打印边 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">leftist_heap_export_dot</span><span class="p">(</span><span class="n">leftist_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=circle];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">heap</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>leftist_heap.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* leftist_heap_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"leftist_heap.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span><span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">16</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">[]</span><span class="o">=</span> <span class="p">{</span><span class="mi">17</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">23</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">alen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">blen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">leftist_heap_pt</span> <span class="n">ha</span><span class="p">,</span> <span class="n">hb</span><span class="p">,</span> <span class="n">hc</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 左倾堆(ha)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">leftist_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 左倾堆(ha)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">leftist_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 左倾堆(hb)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">blen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">hb</span> <span class="o">=</span> <span class="n">leftist_heap_push</span><span class="p">(</span><span class="n">hb</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 左倾堆(hb)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">leftist_heap_print</span><span class="p">(</span><span class="n">hb</span><span class="p">);</span>
+
+    <span class="n">hc</span> <span class="o">=</span> <span class="n">leftist_heap_merge</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">hb</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 合并ha和hb后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">leftist_heap_print</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+
+    <span class="n">leftist_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"leftist1.dot"</span><span class="p">,</span> <span class="s">"合并结果图"</span><span class="p">);</span>
+
+    <span class="n">leftist_heap_destroy</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>leftist_heap_test.c</p>
+<h3 id="_3"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> 左倾堆<span class="o">(</span>ha<span class="o">)</span>中依次添加: <span class="m">10</span> <span class="m">40</span> <span class="m">24</span> <span class="m">30</span> <span class="m">36</span> <span class="m">20</span> <span class="m">12</span> <span class="nv">16</span> 
+<span class="o">==</span> 左倾堆<span class="o">(</span>ha<span class="o">)</span>的详细信息: 
+            *
+        30
+            *
+    24
+            *
+        36
+            *
+10
+                *
+            40
+                *
+        20
+            *
+    12
+            *
+        16
+            *
+
+<span class="o">==</span> 左倾堆<span class="o">(</span>hb<span class="o">)</span>中依次添加: <span class="m">17</span> <span class="m">13</span> <span class="m">11</span> <span class="m">15</span> <span class="m">19</span> <span class="m">21</span> <span class="nv">23</span> 
+<span class="o">==</span> 左倾堆<span class="o">(</span>hb<span class="o">)</span>的详细信息: 
+            *
+        19
+            *
+    15
+            *
+        21
+            *
+11
+            *
+        17
+            *
+    13
+            *
+        23
+            *
+
+<span class="o">==</span> 合并ha和hb后的详细信息: 
+                *
+            19
+                *
+        15
+                *
+            21
+                *
+    11
+                    *
+                17
+                    *
+            13
+                        *
+                    23
+                        *
+                16
+                    *
+        12
+                    *
+                40
+                    *
+            20
+                *
+10
+            *
+        30
+            *
+    24
+            *
+        36
+            *
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图" src="/images/leftist_heap/leftist1.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-24(星期六) 13:47  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+digraph g{
+label="图 3";
+labeljust=l;
+labelloc=t;
+
+{
+l1[label="堆结构",shape="plaintext"];
+n0[label=10];
+n1[label=40];
+n2[label=20];
+n3[label=50];
+n4[label=90];
+n5[label=70];
+n6[label=30];
+n7[label=60];
+n8[label=80];
+n9[label=35,style = filled,color="tomato"];
+n0->{n1,n2};
+n1->{n3,n9};
+n2->{n5,n6};
+n3->{n7,n8};
+n9->n4;
+}
+
+{
+rank="sink";
+l2[label="内存数组",shape="plaintext"];
+arr[label="10 | <f1> 40 | 20 | 50 | <f2> 35 | 70 | 30 | 60 | 80 | 90 | 0 | 0 ", shape="record"];
+arr:f1->arr:f2[style="dotted"];
+arr:f2->arr:f1[style="dotted"];
+}
+
+}
+

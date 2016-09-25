@@ -1,0 +1,19 @@
+digraph g{
+label="图 8";
+labeljust=l;
+labelloc=t;
+node[shape=record];
+
+{
+label="c3";
+//l1[label="A1",shape="plaintext"];
+n0[label="<L> | <C> 13 | <R>", xlabel=1];
+n1[label="<L> | <C> 17 | <R>", xlabel=0];
+n2[label="<L> | <C> 16 | <R>", xlabel=0];
+n3[label="<L> | <C> 23 | <R>", xlabel=0];
+n0:L->n1:C;
+n0:R->n2:C;
+n2:L->n3:C;
+}
+
+}

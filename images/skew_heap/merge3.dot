@@ -1,0 +1,27 @@
+digraph g{
+node[shape=circle];
+label="图3";
+labeljust=l;
+labelloc=t;
+n56[label=12];
+n57[label=24];
+n56->n57;
+n58[label=36];
+n57->n58;
+n59[style=invis];
+n57->n59[style=invis];
+n60[style=invis];
+n57->n60[style=invis];
+n61[style=invis];
+n56->n61[style=invis];
+n62[style=invis];
+n56->n62[style=invis];
+
+n52[label=15];
+n53[label=21];
+n52->n53;
+n54[style=invis];
+n52->n54[style=invis];
+n55[style=invis];
+n52->n55[style=invis];
+}
