@@ -1,0 +1,31 @@
+digraph g{
+label="图 3";
+labeljust=l;
+labelloc=t;
+node[shape=record];
+
+subgraph cluster_1{
+label="A3";
+penwidth=0;
+//l1[label="A1",shape="plaintext"];
+n0[label="<L> | <C> 12 | <R>", xlabel=1];
+n1[label="<L> | <C> 20 | <R>", xlabel=0];
+n2[label="<L> | <C> 16 | <R>", xlabel=0, color="tomato"];
+n3[label="<L> | <C> 40 | <R>", xlabel=0];
+n0:L->n1:C;
+n0:R->n2:C;
+n1:L->n3:C;
+}
+
+subgraph cluster_2{
+label="B3";
+penwidth=0;
+//l2[label="B1",shape="plaintext"];
+m0[label="<L> | <C> 13 | <R>", xlabel=1];
+m1[label="<L> | <C> 17 | <R>", xlabel=0];
+m2[label="<L> | <C> 23 | <R>", xlabel=0];
+m0:L->m1:C;
+m0:R->m2:C;
+}
+
+}

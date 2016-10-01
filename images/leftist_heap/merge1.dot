@@ -1,0 +1,45 @@
+digraph g{
+label="图 1";
+labeljust=l;
+labelloc=t;
+node[shape=record];
+
+subgraph cluster_1{
+label="A1";
+penwidth=0;
+n0[label="<L> | <C> 10 | <R>", xlabel=2];
+n1[label="<L> | <C> 24 | <R>", xlabel=1];
+n2[label="<L> | <C> 12 | <R>", xlabel=1, color="tomato"];
+n3[label="<L> | <C> 30 | <R>", xlabel=0];
+n4[label="<L> | <C> 36 | <R>", xlabel=0];
+n5[label="<L> | <C> 20 | <R>", xlabel=0, color="tomato"];
+n6[label="<L> | <C> 16 | <R>", xlabel=0, color="tomato"];
+n7[label="<L> | <C> 40 | <R>", xlabel=0, color="tomato"];
+n0:L->n1:C;
+n0:R->n2:C;
+n1:L->n3:C;
+n1:R->n4:C;
+n2:L->n5:C;
+n2:R->n6:C
+n5:L->n7:C;
+}
+
+subgraph cluster_2{
+label="B1";
+penwidth=0;
+m0[label="<L> | <C> 11 | <R>", xlabel=2];
+m1[label="<L> | <C> 15 | <R>", xlabel=1];
+m2[label="<L> | <C> 13 | <R>", xlabel=1];
+m3[label="<L> | <C> 19 | <R>", xlabel=0];
+m4[label="<L> | <C> 21 | <R>", xlabel=0];
+m5[label="<L> | <C> 17 | <R>", xlabel=0];
+m6[label="<L> | <C> 23 | <R>", xlabel=0];
+m0:L->m1:C;
+m0:R->m2:C;
+m1:L->m3:C;
+m1:R->m4:C;
+m2:L->m5:C;
+m2:R->m6:C;
+}
+
+}

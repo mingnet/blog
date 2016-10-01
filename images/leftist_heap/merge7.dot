@@ -1,0 +1,15 @@
+digraph g{
+label="图 7";
+labeljust=l;
+labelloc=t;
+node[shape=record];
+
+{
+label="c2";
+//l1[label="A1",shape="plaintext"];
+n0[label="<L> | <C> 16 | <R>", xlabel=0];
+n1[label="<L> | <C> 23 | <R>", xlabel=0];
+n0:L->n1:C;
+}
+
+}

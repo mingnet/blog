@@ -1,0 +1,491 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://www.itzhai.com">IT 宅</a></li>
+							<li><a href="http://hedengcheng.com">何登成的技术博客</a></li>
+							<li><a href="http://www.raychase.net">四火的唠叨</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://blog.zhaojie.me">老赵点滴 - 追求编程之美</a></li>
+							<li><a href="http://dbanotes.net">Fenng</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>二叉堆的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">添加元素图解</a></li>
+<li><a href="#_2">删除堆顶元素图解</a></li>
+<li><a href="#_3">完整源码</a></li>
+<li><a href="#_4">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>堆是一颗完全树，同时满足每个节点均大于或小于它的子节点，这样的数据结构被称为最大堆或者最小堆。
+这种结构处于一种半排序状态，它的存取效率从整体上讲介于有序和无序之间。当对象处于动态时，是种非常有优势的数据结构。存取的时间复杂为log(a,n),其中a为完全树的度。</p>
+<p>通常二叉堆以数组存储，层为 log(2,n)，可以使用以下的代码来定义二叉堆结构。</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span><span class="o">*</span> <span class="n">binary_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">binary_heap_t</span><span class="p">;</span>
+</pre></div>
+<p>当以数组存储时，二叉堆的父子节点下标存在如下关系。</p>
+<p>第一个元素索引为0: </p>
+<ul>
+<li>索引为i的左孩子的索引是 (2*i+1);</li>
+<li>索引为i的右孩子的索引是 (2*i+2);</li>
+<li>索引为i的父结点的索引是 floor((i-1)/2);</li>
+</ul>
+<p>第一个元素索引为1: </p>
+<ul>
+<li>索引为i的左孩子的索引是 (2*i);</li>
+<li>索引为i的右孩子的索引是 (2*i+1);</li>
+<li>索引为i的父结点的索引是 floor(i/2);</li>
+</ul>
+<p>以下代码都按第一个元素索引为0方式</p>
+<h3 id="_1"><strong> 添加元素图解 </strong></h3>
+<p>在堆中添加元素时需要执行向上堆化操作，假设在最小堆中添加35，需要执行以下步骤。</p>
+<p><img alt="图一" src="/images/binary_heap/push1.png"/></p>
+<p><img alt="图二" src="/images/binary_heap/push2.png"/></p>
+<p><img alt="图三" src="/images/binary_heap/push3.png"/></p>
+<p><img alt="图四" src="/images/binary_heap/push4.png"/></p>
+<p>代码实现如下：</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fixup</span>
+<span class="cm"> * Description:  向上堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixup</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">binary_heap_push</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">==</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">fixup</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="o">++</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_2"><strong> 删除堆顶元素图解 </strong></h3>
+<p>在堆中移除堆顶元素时需要执行向下堆化操作，假设在最小堆中移除堆顶完素，需要执行以下步骤。</p>
+<p><img alt="图一" src="/images/binary_heap/pop1.png"/></p>
+<p><img alt="图二" src="/images/binary_heap/pop2.png"/></p>
+<p><img alt="图三" src="/images/binary_heap/pop3.png"/></p>
+<p><img alt="图四" src="/images/binary_heap/pop4.png"/></p>
+<p>代码实现如下：</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fixdown</span>
+<span class="cm"> * Description:  向下堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixdown</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">binary_heap_pop</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">fixdown</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+<span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="o">--</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_3"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* binary_heap.h */</span>
+<span class="cp">#ifndef BINARY_HEAP_H</span>
+<span class="cp">#define BINARY_HEAP_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Item</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span><span class="o">*</span> <span class="n">binary_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">binary_heap_t</span><span class="p">;</span>
+
+<span class="n">binary_heap_pt</span> <span class="nf">binary_heap_init</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binary_heap_free</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binary_heap_print</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">binary_heap_push</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">Item</span> <span class="nf">binary_heap_pop</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">Item</span> <span class="nf">binary_heap_top</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">binary_heap_empty</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>binary_heap.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* binary_heap.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  binary_heap.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  二叉堆实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-09-19 20:08</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binary_heap.h"</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">swap</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Item</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> * 最小堆 ((a) &gt; (b))</span>
+<span class="cm"> * 最大堆 ({a} &lt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) &gt; (b)) </span><span class="cm">/* 最小堆 */</span><span class="cp"></span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fixup</span>
+<span class="cm"> * Description:  向上堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixup</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fixdown</span>
+<span class="cm"> * Description:  向下堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixdown</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">binary_heap_pt</span> 
+<span class="nf">binary_heap_init</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">binary_heap_pt</span> <span class="n">heap_pt</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">binary_heap_t</span><span class="p">));</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">heap_pt</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binary_heap_free</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binary_heap_print</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">binary_heap_push</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">==</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">fixup</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="o">++</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">binary_heap_pop</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">fixdown</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="o">--</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">binary_heap_top</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span>
+<span class="nf">binary_heap_empty</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>binary_heap.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* binary_heap_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binary_heap.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">binary_heap_pt</span> <span class="n">heap</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binary_heap_init</span><span class="p">(</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 空堆检查: %d"</span><span class="p">,</span> <span class="n">binary_heap_empty</span><span class="p">(</span><span class="n">heap</span><span class="p">));</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 插入数据: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 空堆检查: %d"</span><span class="p">,</span> <span class="n">binary_heap_empty</span><span class="p">(</span><span class="n">heap</span><span class="p">));</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 最 小 堆: "</span><span class="p">);</span>
+    <span class="n">binary_heap_print</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+
+    <span class="n">i</span><span class="o">=</span><span class="mi">35</span><span class="p">;</span>
+    <span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 添加元素: %d"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 最 小 堆: "</span><span class="p">);</span>
+    <span class="n">binary_heap_print</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 堆顶元素: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">binary_heap_top</span><span class="p">(</span><span class="n">heap</span><span class="p">));</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 删除元素: %d"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 最 小 堆: "</span><span class="p">);</span>
+    <span class="n">binary_heap_print</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 删除元素: %d"</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 最 小 堆: "</span><span class="p">);</span>
+    <span class="n">binary_heap_print</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binary_heap_free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>binary_heap_test.c</p>
+<h3 id="_4"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> 空堆检查: <span class="nv">1</span>
+<span class="o">==</span> 插入数据: <span class="m">10</span> <span class="m">40</span> <span class="m">30</span> <span class="m">60</span> <span class="m">90</span> <span class="m">70</span> <span class="m">20</span> <span class="m">50</span> <span class="nv">80</span> 
+<span class="o">==</span> 空堆检查: <span class="nv">0</span>
+<span class="o">==</span> 最 小 堆: <span class="m">10</span> <span class="m">40</span> <span class="m">20</span> <span class="m">50</span> <span class="m">90</span> <span class="m">70</span> <span class="m">30</span> <span class="m">60</span> <span class="m">80</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="nv">0</span> 
+<span class="o">==</span> 添加元素: <span class="nv">35</span>
+<span class="o">==</span> 最 小 堆: <span class="m">10</span> <span class="m">35</span> <span class="m">20</span> <span class="m">50</span> <span class="m">40</span> <span class="m">70</span> <span class="m">30</span> <span class="m">60</span> <span class="m">80</span> <span class="m">90</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="nv">0</span> 
+<span class="o">==</span> 堆顶元素: <span class="nv">10</span>
+
+<span class="o">==</span> 删除元素: <span class="nv">10</span>
+<span class="o">==</span> 最 小 堆: <span class="m">20</span> <span class="m">35</span> <span class="m">30</span> <span class="m">50</span> <span class="m">40</span> <span class="m">70</span> <span class="m">90</span> <span class="m">60</span> <span class="m">80</span> <span class="m">10</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="nv">0</span>
+
+<span class="o">==</span> 删除元素: <span class="nv">20</span>
+<span class="o">==</span> 最 小 堆: <span class="m">30</span> <span class="m">35</span> <span class="m">70</span> <span class="m">50</span> <span class="m">40</span> <span class="m">80</span> <span class="m">90</span> <span class="m">60</span> <span class="m">20</span> <span class="m">10</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> 0
+</pre></div>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-07-04(星期一) 23:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

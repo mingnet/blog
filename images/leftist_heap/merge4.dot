@@ -1,0 +1,25 @@
+digraph g{
+label="图 4";
+labeljust=l;
+labelloc=t;
+node[shape=record];
+
+subgraph cluster_1{
+label="A4";
+penwidth=0;
+//l1[label="A1",shape="plaintext"];
+n0[label="<L> | <C> 16 | <R>", xlabel=0];
+}
+
+subgraph cluster_2{
+label="B4";
+penwidth=0;
+//l2[label="B1",shape="plaintext"];
+m0[label="<L> | <C> 13 | <R>", xlabel=1];
+m1[label="<L> | <C> 17 | <R>", xlabel=0];
+m2[label="<L> | <C> 23 | <R>", xlabel=0, color="tomato"];
+m0:L->m1:C;
+m0:R->m2:C;
+}
+
+}
