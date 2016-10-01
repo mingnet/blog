@@ -1,0 +1,54 @@
+digraph g{
+node[shape=circle];
+label="图5";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="二项树0";
+n80[label=13, xlabel=2];
+n81[label=28, xlabel=1];
+n80->n81;
+n82[label=41, xlabel=0];
+n80->n82[weight=100];
+n83[label=33, xlabel=0];
+n81->n83[weight=100];
+}
+subgraph cluster_1 {
+pencolor=green;label="二项树1";
+n84[label=7, xlabel=3];
+n85[label=11, xlabel=2];
+n84->n85;
+n86[label=15, xlabel=1];
+n84->n86;
+n87[label=12, xlabel=0];
+n84->n87[weight=100];
+n88[label=25, xlabel=0];
+n86->n88[weight=100];
+n89[label=24, xlabel=1];
+n85->n89;
+n90[label=48, xlabel=0];
+n85->n90[weight=100];
+n91[label=52, xlabel=0];
+n89->n91[weight=100];
+}
+n80->n84[constraint=false];
+subgraph cluster_2 {
+pencolor=green;label="二项树2";
+n92[label=6, xlabel=3];
+n93[label=18, xlabel=2];
+n92->n93;
+n94[label=9, xlabel=1];
+n92->n94;
+n95[label=23, xlabel=0];
+n92->n95[weight=100];
+n96[label=31, xlabel=0];
+n94->n96[weight=100];
+n97[label=20, xlabel=1];
+n93->n97;
+n98[label=35, xlabel=0];
+n93->n98[weight=100];
+n99[label=42, xlabel=0];
+n97->n99[weight=100];
+}
+n84->n92[constraint=false];
+}

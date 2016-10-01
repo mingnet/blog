@@ -122,6 +122,36 @@
 
 
 <article>
+	<h3><a href="/binomial-heap-algorithm-in-c.html">二项堆的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-01(星期六) 16:41  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>二项堆是一种比较复杂的堆结构，这种数据结构在"算法-c语言实现(第3版)"中有讲解，可惜这本书实在把二项堆说得云山雾罩。</p>
+<p>二项堆是二项树的集合。下面先说明二项树再说明二项堆及其各种操作。</p>
+<h3 id="_1"><strong> 二项树 </strong></h3>
+<p>二项树是一种递归定义的树，它的定义如下：</p>
+<ol>
+<li>二项树B0只有一个节点。</li>
+<li>二项树Bk由两棵二项树B(K-1)组成，其中一棵树是另一棵树的最左孩子。</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/binomial_heap/tree.png"/></p>
+<p>上图的B0,B1,B2,B3,B4都是二项树，B0有一节点，B1由两B0组成，B2由两B1组成，B3由两B2组成，B4由两B3组成；而且，当两颗相同的二项树组成一棵树时，其中一棵树是另一棵树的最左孩子。</p>
+<p>二项树有如下性质：</p>
+<ol>
+<li>BK共有2^K个节点</li>
+<li>BK的高度是K</li>
+<li>BK在深度i处有C(K,i)个节点，其中i=0,1,2,....,K</li>
+<li>根的度为K，它大于任何其它节点的度数</li>
+</ol>
+<h3 id="_2"><strong> 二项堆 </strong></h3>
+<p>二项堆一般用来实现优先队列，是由满足以下性质的二项树构成：</p>
+<ol>
+<li>每棵二项树都满足堆的性质</li>
+<li>不能有两棵以上的二项树具有相同的度数 ...</li></ol>
+		<p class="continue"><a href="/binomial-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
 	<h3><a href="/skew-heap-algorithm-in-c.html">斜堆的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-25(星期日) 21:16  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
@@ -230,7 +260,7 @@
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">4</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">5</span></a></li>
                 </ul>
             </div>
 

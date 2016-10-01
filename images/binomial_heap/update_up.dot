@@ -1,0 +1,40 @@
+digraph g{
+node[shape=circle];
+label="节点值减少";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="二项树0";
+n140[label=13, xlabel=0];
+}
+subgraph cluster_1 {
+pencolor=green;label="二项树1";
+n141[label=11, xlabel=2];
+n142[label=24, xlabel=1];
+n141->n142;
+n143[label=48, xlabel=0];
+n141->n143[weight=100];
+n144[label=52, xlabel=0];
+n142->n144[weight=100];
+}
+n140->n141[constraint=false];
+subgraph cluster_2 {
+pencolor=green;label="二项树2";
+n145[label=2, xlabel=3];
+n146[label=6, xlabel=2];
+n145->n146;
+n147[label=9, xlabel=1];
+n145->n147;
+n148[label=23, xlabel=0];
+n145->n148[weight=100];
+n149[label=31, xlabel=0];
+n147->n149[weight=100];
+n150[label=18, xlabel=1];
+n146->n150;
+n151[label=35, xlabel=0];
+n146->n151[weight=100];
+n152[label=42, xlabel=0];
+n150->n152[weight=100];
+}
+n141->n145[constraint=false];
+}

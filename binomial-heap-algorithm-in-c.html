@@ -1,0 +1,1298 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://www.itzhai.com">IT 宅</a></li>
+							<li><a href="http://hedengcheng.com">何登成的技术博客</a></li>
+							<li><a href="http://www.raychase.net">四火的唠叨</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://blog.zhaojie.me">老赵点滴 - 追求编程之美</a></li>
+							<li><a href="http://dbanotes.net">Fenng</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>二项堆的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">二项树</a></li>
+<li><a href="#_2">二项堆</a></li>
+<li><a href="#adt">二项堆的数据结构及ADT</a></li>
+<li><a href="#_3">合并操作</a></li>
+<li><a href="#_4">删除操作</a></li>
+<li><a href="#_5">删除顶端元素</a></li>
+<li><a href="#_6">更新操作</a></li>
+<li><a href="#_7">完整源码</a></li>
+<li><a href="#_8">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>二项堆是一种比较复杂的堆结构，这种数据结构在"算法-c语言实现(第3版)"中有讲解，可惜这本书实在把二项堆说得云山雾罩。</p>
+<p>二项堆是二项树的集合。下面先说明二项树再说明二项堆及其各种操作。</p>
+<h3 id="_1"><strong> 二项树 </strong></h3>
+<p>二项树是一种递归定义的树，它的定义如下：</p>
+<ol>
+<li>二项树B0只有一个节点。</li>
+<li>二项树Bk由两棵二项树B(K-1)组成，其中一棵树是另一棵树的最左孩子。</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/binomial_heap/tree.png"/></p>
+<p>上图的B0,B1,B2,B3,B4都是二项树，B0有一节点，B1由两B0组成，B2由两B1组成，B3由两B2组成，B4由两B3组成；而且，当两颗相同的二项树组成一棵树时，其中一棵树是另一棵树的最左孩子。</p>
+<p>二项树有如下性质：</p>
+<ol>
+<li>BK共有2^K个节点</li>
+<li>BK的高度是K</li>
+<li>BK在深度i处有C(K,i)个节点，其中i=0,1,2,....,K</li>
+<li>根的度为K，它大于任何其它节点的度数</li>
+</ol>
+<h3 id="_2"><strong> 二项堆 </strong></h3>
+<p>二项堆一般用来实现优先队列，是由满足以下性质的二项树构成：</p>
+<ol>
+<li>每棵二项树都满足堆的性质</li>
+<li>不能有两棵以上的二项树具有相同的度数。即在二项堆中，度数为K的二项树有0个或1个。</li>
+</ol>
+<p><img alt="图一" src="/images/binomial_heap/binomial.png"/></p>
+<p>上图就是一棵二项堆。它由3棵二项树组成。
+可以将包含n个节点的二项堆，表示成若干个2的指数和(或者转换成二进制)，则每一个2个指数都对应一棵二项树。例如，13(二进制是1101)的2个指数和为13=23 + 22 + 20, 因此具有13个节点的二项堆由度数为3, 2, 0的三棵二项树组成。</p>
+<h3 id="adt"><strong> 二项堆的数据结构及ADT </strong></h3>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binomial_node_s</span> <span class="o">*</span><span class="n">binomial_node_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binomial_node_s</span> <span class="p">{</span>  
+    <span class="n">binomial_node_pt</span> <span class="n">parent</span><span class="p">;</span>     <span class="c1">//父节点</span>
+    <span class="n">binomial_node_pt</span> <span class="n">leftchild</span><span class="p">;</span>  <span class="c1">//左孩子</span>
+    <span class="n">binomial_node_pt</span> <span class="n">sibling</span><span class="p">;</span>    <span class="c1">//兄弟节点</span>
+    <span class="kt">int</span> <span class="n">degree</span><span class="p">;</span>                  <span class="c1">//度数</span>
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>                   <span class="c1">//数据</span>
+<span class="p">}</span> <span class="n">binomial_node_t</span><span class="p">;</span>
+
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_union</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_push</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_update</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_find</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_top</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_pop</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_delete</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_destroy</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_print</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_export_dot</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+</pre></div>
+<h3 id="_3"><strong> 合并操作 </strong></h3>
+<p>合并操作是二项堆的重点，二项堆的添加操作也是基于合并操作来实现的。</p>
+<p>合并两个二项堆，需要的步骤如下：</p>
+<ol>
+<li>将两个二项堆的根链表合并成一个链表。合并后的新链表按照"节点的度数"单调递增排列。</li>
+<li>将新链表中"根节点度数相同的二项树"连接起来，直到所有根节点度数都不相同。</li>
+</ol>
+<p>合并操作示意图</p>
+<p><img alt="图一" src="/images/binomial_heap/union1.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/union2.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/union3.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/union4.png"/></p>
+<p><img alt="图五" src="/images/binomial_heap/union5.png"/></p>
+<p><img alt="图六" src="/images/binomial_heap/union6.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_tree_link</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">t1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">t2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">t1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">t2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">t2</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">t2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">t1</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">t1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">binomial_node_pt</span>
+<span class="nf">binomial_heap_merge</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">binomial_node_pt</span> <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">head</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">h1</span> <span class="o">&amp;&amp;</span> <span class="n">h2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">&lt;</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
+            <span class="n">h1</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
+            <span class="n">h2</span> <span class="o">=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">pos</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_union</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_merge</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">pos_pt</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">heap</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">==</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">==</span><span class="nb">NULL</span> <span class="o">||</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">!=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pos_pt</span> <span class="o">=</span> <span class="n">binomial_tree_link</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">);</span>
+            <span class="p">(</span><span class="o">*</span><span class="n">pos_pt</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">pos_pt</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">pos_pt</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>binomial_heap_merge的作用就是"两个二项堆的根链表合并成一个链表，合并后的新链表按照'节点的度数'单调递增排序"。</p>
+<p>binomial_tree_link则是为了合并操作的辅助函数，它的作用是将两个根节点度数相同的二项树连接起来。</p>
+<h3 id="_4"><strong> 删除操作 </strong></h3>
+<p>删除二项堆中的某个节点，需要的步骤如下：</p>
+<ol>
+<li>将"该节点"交换到"它所在二项树"的根节点位置。方法是，从"该节点"不断向上(即向树根方向)"遍历，不断交换父节点和子节点的数据，直到被删除的键值到达树根位置</li>
+<li>将"该节点所在的二项树"从二项堆中移除</li>
+<li>将"该节点所在的二项树"进行反转。反转的意思，就是将根的所有孩子独立出来，并将这些孩子整合成二项堆，将该二项堆记为child。</li>
+<li>将child和heap进行合并操作。</li>
+</ol>
+<p>删除操作示意图</p>
+<p><img alt="图一" src="/images/binomial_heap/delete1.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/delete1.5.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/delete2.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/delete3.png"/></p>
+<p><img alt="图五" src="/images/binomial_heap/delete4.png"/></p>
+<p><img alt="图六" src="/images/binomial_heap/delete5.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_reverse</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_delete</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">pre_head</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pre_head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">node</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pre_head</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre_head</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pre_head</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span> <span class="o">=</span> <span class="n">binomial_reverse</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">);</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">child</span><span class="p">);</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>binomial_reverse的作用是反转二项堆，并返回反转之后的根节点。</p>
+<h3 id="_5"><strong> 删除顶端元素 </strong></h3>
+<p>这个操作与删除操作相似，差别只是删除节点已经在树的根节点上，所以不再需要向上遍历。</p>
+<p><img alt="图一" src="/images/binomial_heap/pop1.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/pop2.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/pop3.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/pop4.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="n">binomial_node_pt</span>
+<span class="nf">binomial_heap_pop</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">pre_node</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">_binomial_heap_top</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pre_node</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre_node</span>  <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">pre_node</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span> <span class="o">=</span> <span class="n">binomial_reverse</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">);</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">child</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_6"><strong> 更新操作 </strong></h3>
+<p>更新二项堆中的某个节点，就是修改节点的值，它包括两部分分："向上调整" 和 "向下调整"</p>
+<p>更新操作实现代码：</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">binomial_heap_update</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">oldelement</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">oldelement</span><span class="p">,</span> <span class="n">newelement</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">binomial_tree_update_up</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">binomial_tree_update_down</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>向上调整很简单：需要更新的节点位于一棵二项树中；不断的将该节点上调，以至树符合二项树的规则。</p>
+<p>更新操作向上调整示意图</p>
+<p><img alt="图一" src="/images/binomial_heap/update_up1.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/update_up2.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/update_up3.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/update_up4.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  binomial_tree_update_up</span>
+<span class="cm"> * Description:  更新高优先级数据后，向上调整二项树</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_update_up</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>向下调整也类似，需要更新的节点位于一棵二项树中；不断的将该节点下调，以至树符合二项树的规则。主要的区别是要从节点的所有子树中选择一个节点作为下调目标节点。</p>
+<p><img alt="图一" src="/images/binomial_heap/update_down1.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/update_down2.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/update_down3.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/update_down4.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  binomial_tree_update_down</span>
+<span class="cm"> * Description:  更新低优先级数据后，向下调整二项树</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_update_down</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">pos</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">best_child</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">best_child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">best_child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">best_child</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">best_child</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_7"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* binomial_heap.h */</span>
+<span class="cp">#ifndef BINOMIAL_HEAP_H</span>
+<span class="cp">#define BINOMIAL_HEAP_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binomial_node_s</span> <span class="o">*</span><span class="n">binomial_node_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binomial_node_s</span> <span class="p">{</span>  
+    <span class="n">binomial_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="n">binomial_node_pt</span> <span class="n">leftchild</span><span class="p">;</span>  
+    <span class="n">binomial_node_pt</span> <span class="n">sibling</span><span class="p">;</span>  
+    <span class="kt">int</span> <span class="n">degree</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">binomial_node_t</span><span class="p">;</span>
+
+
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_union</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_push</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_update</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_find</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_top</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_pop</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_delete</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_destroy</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_print</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binomial_heap_export_dot</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>binomial_heap.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  binomial_heap.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  二项堆实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-09-26 20:13</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binomial_heap.h"</span><span class="cp"></span>
+
+
+<span class="cm">/* </span>
+<span class="cm"> * 最小堆 ((a) &gt; (b))</span>
+<span class="cm"> * 最大堆 ({a} &lt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) &gt; (b)) </span><span class="cm">/* 最小堆 */</span><span class="cp"></span>
+
+<span class="cp">#define item_equal(a, b) ((a) == (b)) </span><span class="cm">/* 检查是否相等 */</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">p1</span><span class="p">,</span> <span class="n">Item</span> <span class="o">*</span><span class="n">p2</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">binomial_node_pt</span> <span class="nf">binomial_node_new</span><span class="p">(</span><span class="n">Item</span> <span class="n">data</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">binomial_node_pt</span> <span class="nf">binomial_tree_link</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">t1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">t2</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">binomial_node_pt</span> <span class="nf">binomial_heap_merge</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">binomial_tree_update_up</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">binomial_tree_update_down</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">swap</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">p1</span><span class="p">,</span> <span class="n">Item</span> <span class="o">*</span><span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Item</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p1</span> <span class="o">=</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">p2</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_node_new</span><span class="p">(</span><span class="n">Item</span> <span class="n">data</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="p">(</span><span class="n">binomial_node_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">binomial_node_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"malloc binomial node failed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_tree_link</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">t1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">t2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">t1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">t2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">t2</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">t2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">t1</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">t2</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
+        <span class="n">t1</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">t1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">binomial_node_pt</span>
+<span class="nf">binomial_heap_merge</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">binomial_node_pt</span> <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">head</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">h1</span> <span class="o">&amp;&amp;</span> <span class="n">h2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">&lt;</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
+            <span class="n">h1</span> <span class="o">=</span> <span class="n">h1</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
+            <span class="n">h2</span> <span class="o">=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">pos</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">pos</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_union</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_merge</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">pos_pt</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">heap</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">==</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">==</span><span class="nb">NULL</span> <span class="o">||</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">!=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">pos_pt</span> <span class="o">=</span> <span class="n">binomial_tree_link</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">);</span>
+            <span class="p">(</span><span class="o">*</span><span class="n">pos_pt</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">pos_pt</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="o">*</span><span class="n">pos_pt</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="o">*</span><span class="n">pos_pt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_find</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_equal</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">temp</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">temp</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_push</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">;</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">binomial_node_new</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  binomial_tree_update_up</span>
+<span class="cm"> * Description:  更新高优先级数据后，向上调整二项树</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_update_up</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  binomial_tree_update_down</span>
+<span class="cm"> * Description:  更新低优先级数据后，向下调整二项树</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_update_down</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">pos</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">best_child</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">;</span>
+        <span class="n">best_child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">best_child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">best_child</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">best_child</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">best_child</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>
+<span class="nf">binomial_heap_update</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">oldelement</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">oldelement</span><span class="p">,</span> <span class="n">newelement</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">binomial_tree_update_up</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">binomial_tree_update_down</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span>
+<span class="nf">_binomial_heap_top</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="o">*</span><span class="n">pre_tree</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="o">*</span><span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="n">pre_tree</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">tree</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">((</span><span class="o">*</span><span class="n">tree</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">pre_tree</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+            <span class="o">*</span><span class="n">tree</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+            <span class="n">heap</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_top</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">pre_node</span><span class="p">;</span>
+    <span class="n">_binomial_heap_top</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pre_node</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_reverse</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">binomial_node_pt</span>
+<span class="nf">binomial_heap_pop</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">pre_node</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">_binomial_heap_top</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pre_node</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">node</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre_node</span>  <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">pre_node</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span> <span class="o">=</span> <span class="n">binomial_reverse</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">);</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">child</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="n">binomial_node_pt</span> 
+<span class="nf">binomial_heap_delete</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">pre_head</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">binomial_heap_find</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pre_head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">node</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pre_head</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">pre_head</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pre_head</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span> <span class="o">=</span> <span class="n">binomial_reverse</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">);</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">child</span><span class="p">);</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binomial_heap_destroy</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">);</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_printnode</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">binomial_tree_show</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"---------------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">binomial_tree_printnode</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">binomial_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">binomial_tree_printnode</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+    <span class="n">binomial_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binomial_heap_print</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">binomial_tree_show</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">tree_first_label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">tree_first_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d, xlabel=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">);</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="cm">/* 打印边 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[weight=100];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">leftchild</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印兄弟节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">tree_first_label</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">leftchild</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree_first_label</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> 
+<span class="nf">binomial_heap_export_dot</span><span class="p">(</span><span class="n">binomial_node_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">binomial_node_pt</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">cluster_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">tree_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="kt">char</span> <span class="n">last_tree_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=circle];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">tree</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"subgraph cluster_%d {</span><span class="se">\n</span><span class="s">pencolor=green;label=</span><span class="se">\"</span><span class="s">二项树%d</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">cluster_num</span><span class="p">,</span> <span class="n">cluster_num</span><span class="p">);</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">last_tree_name</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">tree_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tree_name</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="n">cluster_num</span><span class="o">++</span><span class="p">;</span> 
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">tree_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">last_tree_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[constraint=false];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_tree_name</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">sibling</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>binomial_heap.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* binomial_heap_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binomial_heap.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span><span class="o">=</span> <span class="p">{</span><span class="mi">42</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">52</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">48</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">13</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">[]</span><span class="o">=</span> <span class="p">{</span><span class="mi">25</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">41</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">alen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">blen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">binomial_node_pt</span> <span class="n">ha</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">hb</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">hc</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 二项堆(ha)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆(ha)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆(hb)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">blen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">hb</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">hb</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆(hb)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">hb</span><span class="p">);</span>
+
+    <span class="n">hc</span> <span class="o">=</span> <span class="n">binomial_heap_union</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">hb</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 合并ha和hb后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="n">binomial_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"union.dot"</span><span class="p">,</span> <span class="s">"合并结果"</span><span class="p">);</span>
+
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+
+    <span class="n">ha</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 二项堆(ha)中节点值20减少为2: "</span><span class="p">);</span>
+    <span class="n">binomial_heap_update</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆ha中节点20减少为2后详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">binomial_heap_export_dot</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="s">"update_up.dot"</span><span class="p">,</span> <span class="s">"节点值减少"</span><span class="p">);</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="n">ha</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 二项堆(ha)中节点值6增加为60: "</span><span class="p">);</span>
+    <span class="n">binomial_heap_update</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">60</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆ha中节点6增加为60后详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">binomial_heap_export_dot</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="s">"update_down.dot"</span><span class="p">,</span> <span class="s">"节点值增加"</span><span class="p">);</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="n">ha</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">binomial_heap_top</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 二项堆(ha)中最优节点值: %d"</span><span class="p">,</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_pop</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆ha中弹出最优节点: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">binomial_heap_export_dot</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="s">"pop.dot"</span><span class="p">,</span> <span class="s">"弹出最优节点"</span><span class="p">);</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="n">ha</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">ha</span> <span class="o">=</span> <span class="n">binomial_heap_delete</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 二项堆ha中删除节点20: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">binomial_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">binomial_heap_export_dot</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="s">"delete.dot"</span><span class="p">,</span> <span class="s">"删除节点"</span><span class="p">);</span>
+    <span class="n">binomial_heap_destroy</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>binomial_heap_test.c</p>
+<h3 id="_8"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> 二项堆<span class="o">(</span>ha<span class="o">)</span>中依次添加: <span class="m">42</span> <span class="m">20</span> <span class="m">35</span> <span class="m">18</span> <span class="m">31</span> <span class="m">9</span> <span class="m">23</span> <span class="m">6</span> <span class="m">52</span> <span class="m">24</span> <span class="m">48</span> <span class="m">11</span> <span class="nv">13</span> 
+<span class="o">==</span> 二项堆<span class="o">(</span>ha<span class="o">)</span>的详细信息: 
+---------------------------
+    *
+13
+---------------------------
+            *
+        52
+        *
+    24
+        *
+    48
+    *
+11
+---------------------------
+                *
+            42
+            *
+        20
+            *
+        35
+        *
+    18
+            *
+        31
+        *
+    9
+        *
+    23
+    *
+6
+---------------------------
+*
+
+<span class="o">==</span> 二项堆<span class="o">(</span>hb<span class="o">)</span>中依次添加: <span class="m">25</span> <span class="m">15</span> <span class="m">12</span> <span class="m">7</span> <span class="m">33</span> <span class="m">28</span> <span class="nv">41</span> 
+<span class="o">==</span> 二项堆<span class="o">(</span>hb<span class="o">)</span>的详细信息: 
+---------------------------
+    *
+41
+---------------------------
+        *
+    33
+    *
+28
+---------------------------
+            *
+        25
+        *
+    15
+        *
+    12
+    *
+7
+---------------------------
+*
+
+<span class="o">==</span> 合并ha和hb后的详细信息: 
+---------------------------
+            *
+        33
+        *
+    28
+        *
+    41
+    *
+13
+---------------------------
+                    *
+                52
+                *
+            24
+                *
+            48
+            *
+        11
+                *
+            25
+            *
+        15
+            *
+        12
+        *
+    7
+                *
+            42
+            *
+        20
+            *
+        35
+        *
+    18
+            *
+        31
+        *
+    9
+        *
+    23
+    *
+6
+---------------------------
+*
+<span class="o">==</span> 二项堆<span class="o">(</span>ha<span class="o">)</span>中节点值20减少为2: 
+<span class="o">==</span> 二项堆ha中节点20减少为2后详细信息: 
+---------------------------
+    *
+13
+---------------------------
+            *
+        52
+        *
+    24
+        *
+    48
+    *
+11
+---------------------------
+                *
+            42
+            *
+        18
+            *
+        35
+        *
+    6
+            *
+        31
+        *
+    9
+        *
+    23
+    *
+2
+---------------------------
+*
+<span class="o">==</span> 二项堆<span class="o">(</span>ha<span class="o">)</span>中节点值6增加为60: 
+<span class="o">==</span> 二项堆ha中节点6增加为60后详细信息: 
+---------------------------
+    *
+13
+---------------------------
+            *
+        52
+        *
+    24
+        *
+    48
+    *
+11
+---------------------------
+                *
+            42
+            *
+        20
+            *
+        60
+        *
+    35
+            *
+        31
+        *
+    9
+        *
+    23
+    *
+18
+---------------------------
+*
+<span class="o">==</span> 二项堆<span class="o">(</span>ha<span class="o">)</span>中最优节点值: <span class="nv">6</span>
+<span class="o">==</span> 二项堆ha中弹出最优节点: 
+---------------------------
+            *
+        23
+        *
+    13
+        *
+    31
+    *
+9
+---------------------------
+                *
+            42
+            *
+        20
+            *
+        35
+        *
+    18
+            *
+        52
+        *
+    24
+        *
+    48
+    *
+11
+---------------------------
+*
+
+<span class="o">==</span> 二项堆ha中删除节点20: 
+---------------------------
+            *
+        23
+        *
+    13
+        *
+    31
+    *
+9
+---------------------------
+                *
+            52
+            *
+        24
+            *
+        48
+        *
+    11
+            *
+        42
+        *
+    18
+        *
+    35
+    *
+6
+---------------------------
+*
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图一" src="/images/binomial_heap/union.png"/></p>
+<p><img alt="图二" src="/images/binomial_heap/update_up.png"/></p>
+<p><img alt="图三" src="/images/binomial_heap/update_down.png"/></p>
+<p><img alt="图四" src="/images/binomial_heap/pop.png"/></p>
+<p><img alt="图五" src="/images/binomial_heap/delete.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-01(星期六) 16:41  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>
