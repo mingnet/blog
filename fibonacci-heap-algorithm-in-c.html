@@ -1,0 +1,1575 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>斐波那契堆的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">斐波那契堆与二项堆的区别</a></li>
+<li><a href="#_2">名称由来及最大度数</a></li>
+<li><a href="#_3">插入操作</a></li>
+<li><a href="#_4">合并操作</a></li>
+<li><a href="#_5">删除最小元素操作</a></li>
+<li><a href="#_6">减小节点值</a></li>
+<li><a href="#_7">增加节点值</a></li>
+<li><a href="#_8">删除节点</a></li>
+<li><a href="#_9">完整源码</a></li>
+<li><a href="#_10">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>斐波那契堆同二项堆一样,也是一种可合并堆。斐波那契堆的优势是：不涉及删除元素的操作仅需要O（1）的平摊运行时间。和二项堆一样，斐波那契堆由一组树构成。这种堆松散地基于二项堆，说松散是因为：如果不对斐波那契堆做任何DECREASE-KEY 或 DELETE 操作，则堆中每棵树就和二项树一样；但是如果执行这两种操作，在一些状态下必须要破坏二项树的特征，比如DECREASE-KEY或DELETE 后，有的树高为k，但是结点个数却少于2^k，这种情况下，堆中的树不是二项树。</p>
+<p>与二项堆相比，斐波那契堆同样是由一组最小堆有序树构成，但是斐波那契堆中的树都是有根而无序的，也就是说，单独的树满足最小堆特性，但是堆内树与树之间是无序的，如下图。</p>
+<p><img alt="图" src="/images/fibonacci_heap/fibonacci.png"/></p>
+<p>对于斐波那契堆上的各种可合并操作，关键思想是尽可能久地将工作推后。例如，当向斐波那契堆中插入新结点或合并两个斐波那契堆时，并不去合并树，而是将这个工作留给EXTRACT-MIN操作。</p>
+<p><img alt="图" src="/images/fibonacci_heap/complexity.png"/></p>
+<p>二项堆和斐波那契堆对于search操作的支持均比较低效；可能花费一段时间才能找到关键字。理论上来讲，对于extreact-min和delete操作相对于其他操作少的情况下，斐波那契堆确实提高了很大的效率。
+但是实际中，除了某些需要管理大量数据的应用外，对于大多数应用，斐波那契堆的常数因子和变程复杂性使得它比起普通二项堆并不是那么适用。</p>
+<p>算法导论中提到，最小生成树与寻找单源最短路径的快速算法必须使用到斐波那契堆。</p>
+<h3 id="_1"><strong> 斐波那契堆与二项堆的区别 </strong></h3>
+<p>斐波那契堆是一种基于二项堆的松散数据结构。它与二项堆不同的地方在于：</p>
+<ol>
+<li>
+<p>root list和任何结点的child list使用双向循环链表，而且这些lists中的结点不再有先后次序（二项堆中root list的根结点按degree从小到大顺序，child list的结点按degree从大到小顺序）；</p>
+</li>
+<li>
+<p>二项堆中任何一颗二项树中根结点的degree是最大的，而斐波那契堆中由于decrease-key操作(cut和cascading cut)的缘故，并不能保证根结点的degree最大；</p>
+</li>
+<li>
+<p>二项堆中任何结点（degree等于k的）为根的子树中，结点总数为2^k；斐波那契堆中相应的结点总数下界为F{k+2}，上界为2^k（如果没有 Extract-Min和Delete两类操作的话）。其中F{k+2}表示Fibonacci数列（即0,1,1,2,3,5,8,11...）中第 k+2个Fibonacci数。注意不像二项堆由二项树组成那样，Fibonacci堆的 root list中的每棵树并不是Fibonacci树（Fibonacci树属于AVL树）。</p>
+</li>
+<li>
+<p>基于上面的区别，若斐波那契堆中结点总数为n，那么其中任何结点（包括非根结点）的degree最大值不超过 D(n) = floor(lgn/lg1.618)，这里1.618表示黄金分割率(goldren ratio)，即方程x^2=x+1的一个解。所以在Extract-Min的consolidate操作之后，root list中的结点最多有D(n)+1。而二项堆中degree最大值不超过floor(lgn)，从而root list中最多有floor(lgn)+1颗二项树。</p>
+</li>
+<li>
+<p>另外一个与二项堆的最大不同之处在于：Fibonacci Heap是一种具有平摊意义上的高性能数据结构。除了Extract-Min和Delete两类操作具有平摊复杂度O(lgn)，其他的操作(insert，union，find- min，decrease-key）的平摊复杂度都是常数级。因此如果有一系列的操作，其中Extract-min和delete操作个数为p，其他操作 个数为q，p &lt; q，那么总的平摊复杂度为O(p + q.lgn)。达到这个复杂度的原因有以下几点，第一，root list和任何结点的child list中使用了双向循环链表；第二，union和insert操作的延迟合并，从而在所有的可合并堆中，Fibonacci heap的合并开销O(1)最小的；第 三，decrease-key中cut和cascading cut的巧妙处理（即任何非根结点最多失去一个孩子）。</p>
+</li>
+</ol>
+<h3 id="_2"><strong> 名称由来及最大度数 </strong></h3>
+<p>斐波那契堆的名称来由于每棵树的最小结点数满足斐波那契数列。由于节点中marked值的限制，每个非根节点最多失去一个孩子，所以每树的最小结点数有斐波那契数列的特征，这个在算法导论中有说明，应该并不难理解。</p>
+<p><strong>最大度数:</strong> 斐波那契堆中的其中一棵树，如果有n个结点，则结点的最大度数D(n) = lgn(向下取整)，证明原理可以看算法导论。但在使用最大度数计算数组长度时需要加1，因为有个零度的。</p>
+<p>数据结构</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_node_s</span> <span class="p">{</span>  
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">degree</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">marked</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">fibonacci_node_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_heap_s</span> <span class="o">*</span><span class="n">fibonacci_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_heap_s</span> <span class="p">{</span>
+    <span class="cm">/* 堆的节点总数 */</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+
+    <span class="cm">/* 堆的最小树根节点 */</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">min</span><span class="p">;</span>
+
+    <span class="cm">/* 堆的节点链表的最大度值，根据节点总数计算取得 */</span>
+    <span class="kt">int</span>   <span class="n">maxdegree</span><span class="p">;</span>
+
+    <span class="cm">/* </span>
+<span class="cm">     * 节点的指针数组空间</span>
+<span class="cm">     * 用于根链表合并调整时暂存数据，减少每次合并链表操作申请空间的消耗</span>
+<span class="cm">     */</span>
+    <span class="n">fibonacci_node_pt</span> <span class="o">*</span><span class="n">cons</span><span class="p">;</span> 
+<span class="p">}</span> <span class="n">fibonacci_heap_t</span><span class="p">;</span>
+</pre></div>
+<p>fibonacci_node_t是斐波那契堆的节点类。其中data是节点中的数据，degree是记录节点的度，left和right分别是指向节点的左右兄弟，child是节点的第一个孩子，parent是节点的父节点，marked是记录该节点是否自从上一次成为另一个结点的孩子后，是否失去过孩子。删除点后进行级联剪切时将用到这个值。</p>
+<h3 id="_3"><strong> 插入操作 </strong></h3>
+<p>插入新节点在斐波那契堆中非常简单，将新的节点当做一棵新的树的根插入到根表中即可。如下图所示：</p>
+<p><img alt="图一" src="/images/fibonacci_heap/push1.png"/></p>
+<p><img alt="图二" src="/images/fibonacci_heap/push2.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_add</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_push</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">fib_node_new</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="o">++</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+<h3 id="_4"><strong> 合并操作 </strong></h3>
+<p>合并两个斐波那契堆的操作也很简单，可以分为两步：</p>
+<ol>
+<li>将两个根表通过指针合并为一个根表</li>
+<li>更新min，只需要比较两个堆的min，取较小的即可</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/fibonacci_heap/union1.png"/></p>
+<p><img alt="图二" src="/images/fibonacci_heap/union2.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_node_cat</span>
+<span class="cm"> * Description:  把双链表n2连接到n1上</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_cat</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">n1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+
+    <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">fibonacci_heap_pt</span> 
+<span class="nf">fib_heap_union</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">fibonacci_heap_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_cat</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">num</span> <span class="o">+=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_5"><strong> 删除最小元素操作 </strong></h3>
+<p>抽取最小结点的操作是斐波那契堆中较复杂的操作。</p>
+<ol>
+<li>将要抽取最小结点的子树都直接串联在根表中；</li>
+<li>合并所有degree相等的树，直到没有相等的degree的树。</li>
+</ol>
+<p>过程如下图所示(这个算法导论的示例图就解析得很清楚)：</p>
+<p><img alt="图一" src="/images/fibonacci_heap/pop1.png"/></p>
+<p>把最小节点所在树的所有子树连接到根链表上。</p>
+<p><img alt="图二" src="/images/fibonacci_heap/pop2.png"/></p>
+<p>移除最小节点</p>
+<p><img alt="图三" src="/images/fibonacci_heap/pop3.png"/></p>
+<p>遍历合并所有根链表中degree相等的树。</p>
+<p><img alt="图四" src="/images/fibonacci_heap/consolidate1.png"/></p>
+<p><img alt="图五" src="/images/fibonacci_heap/consolidate2.png"/></p>
+<p><img alt="图六" src="/images/fibonacci_heap/consolidate3.png"/></p>
+<p><img alt="图七" src="/images/fibonacci_heap/consolidate4.png"/></p>
+<p><img alt="图八" src="/images/fibonacci_heap/consolidate5.png"/></p>
+<p><img alt="图九" src="/images/fibonacci_heap/consolidate6.png"/></p>
+<p><img alt="图十" src="/images/fibonacci_heap/consolidate7.png"/></p>
+<p><img alt="图十一" src="/images/fibonacci_heap/consolidate8.png"/></p>
+<p><img alt="图十二" src="/images/fibonacci_heap/consolidate9.png"/></p>
+<p><img alt="图十三" src="/images/fibonacci_heap/consolidate10.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_link</span>
+<span class="cm"> * Description:  把两棵树合并为新树，返回合并好的树</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> 
+<span class="nf">fib_heap_link</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">n2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//fib_node_add(root-&gt;child, child);</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">;</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">child</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_node_remove</span>
+<span class="cm"> * Description:  从node的双向链表中移除节点node</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_remove</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cons_make</span>
+<span class="cm"> * Description:  生成堆的双链表调节所需要的空间</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cons_make</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">maxdegree</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log</span><span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">)</span><span class="o">/</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">&gt;=</span> <span class="n">maxdegree</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">=</span> <span class="n">maxdegree</span><span class="p">;</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span> <span class="o">=</span> <span class="p">(</span><span class="n">fibonacci_node_pt</span><span class="o">*</span><span class="p">)</span><span class="n">realloc</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_consolidate</span>
+<span class="cm"> * Description:  堆的链表调整合并</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_consolidate</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">d</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+
+    <span class="n">fib_heap_cons_make</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+    <span class="n">next</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">fib_heap_link</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]);</span>
+            <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+        <span class="n">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_childlink_to_heaplink</span>
+<span class="cm"> * Description:  把子树的双链表连接到堆的双链表</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">heaplink</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">childlink</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">childlink</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//修改min指向儿子的双链表中的parent指针</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">childlink</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">childlink</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//把child指向的双链表连接到min指向的双链表上</span>
+    <span class="n">fib_node_cat</span><span class="p">(</span><span class="n">heaplink</span><span class="p">,</span> <span class="n">childlink</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_pop</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">min</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+
+    <span class="n">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">min</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+
+    <span class="n">fib_node_remove</span><span class="p">(</span><span class="n">min</span><span class="p">);</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="n">fib_heap_consolidate</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">min</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_6"><strong> 减小节点值 </strong></h3>
+<p>减少斐波那契堆中的节点的键值，这个操作的难点是：如果减少节点后破坏了"最小堆"性质，如何去维护。</p>
+<ol>
+<li>首先，将以"被减小节点"为根的子树从"最小堆"中剥离出来，然后将该树关联到根链表中。</li>
+<li>接着，对"被减少节点"的原父节点进行"级联剪切"。所谓"级联剪切"，就是在被减小节点破坏了最小堆性质，并被切下来之后；再从"它的父节点"进行递归级联剪切操作。
+   级联操作的步骤：若父节点(被减小节点的父节点)的marked标记为false，则将其设为true，然后退出。否则，将父节点从最小堆中切下来(方式和"切被减小节点的方式"一样)；然后递归对祖父节点进行"级联剪切"。
+   marked标记的作用就是用来标记"该节点的子节点是否有被删除过"，它的作用是来实现级联剪切。而级联剪切的真正目的是为了防止"最小堆"由二叉树演化成链表。</li>
+<li>最后，对根链表的最小节点进行更新。</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/fibonacci_heap/decrease1.png"/></p>
+<p><img alt="图二" src="/images/fibonacci_heap/decrease2.png"/></p>
+<p><img alt="图三" src="/images/fibonacci_heap/decrease3.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cut</span>
+<span class="cm"> * Description:  把堆heap中其中一个树的子节点node切下连接到堆的双链表中</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">parent</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">--</span><span class="p">;</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cascading_cut</span>
+<span class="cm"> * Description:  对堆heap的node节点进行级联剪切</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_decrease</span>
+<span class="cm"> * Description:  堆heap的node节点值减少为element</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_decrease</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+        <span class="c1">//fib_heap_export_dot(heap, "decrease2.dot", "图2");</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+<h3 id="_7"><strong> 增加节点值 </strong></h3>
+<p>增加节点值和减少节点值类似，这个操作的难点也是如何维护"最小堆"性质。思路如下：</p>
+<ol>
+<li>将"被增加节点"的"左孩子和左孩子的所有兄弟"都链接到根链表中。</li>
+<li>接下来，把"被增加节点"添加到根链表；但是别忘了对其进行级联剪切。</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/fibonacci_heap/increase1.png"/></p>
+<p><img alt="图二" src="/images/fibonacci_heap/increase2.png"/></p>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_increase</span>
+<span class="cm"> * Description:  堆heap的node节点值增加为element</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span>
+<span class="nf">fib_heap_increase</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+
+    <span class="n">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_8"><strong> 删除节点 </strong></h3>
+<ol>
+<li>先将被删除节点的键值减少。减少后的值要比"原最小节点的值"即可。</li>
+<li>取出最小节点</li>
+</ol>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> 
+<span class="nf">fib_heap_delete</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="n">value</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">fib_node_search</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="n">fib_heap_decrease</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">value</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">fib_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_9"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* fibonacci_heap.h */</span>
+<span class="cp">#ifndef FIBONACCI_HEAP_H</span>
+<span class="cp">#define FIBONACCI_HEAP_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_node_s</span> <span class="o">*</span><span class="n">fibonacci_node_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_node_s</span> <span class="p">{</span>  
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">degree</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">marked</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">fibonacci_node_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_heap_s</span> <span class="o">*</span><span class="n">fibonacci_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">fibonacci_heap_s</span> <span class="p">{</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 堆的节点总数</span>
+<span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+
+    <span class="cm">/* </span>
+<span class="cm">     * 堆的最小树根节点</span>
+<span class="cm">     */</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">min</span><span class="p">;</span>
+
+    <span class="cm">/* </span>
+<span class="cm">     * 堆的节点链表的最大度值，根据节点总数计算取得</span>
+<span class="cm">     */</span>
+    <span class="kt">int</span>   <span class="n">maxdegree</span><span class="p">;</span>
+
+    <span class="cm">/* </span>
+<span class="cm">     * 节点的指针数组空间</span>
+<span class="cm">     * 用于根链表合并调整时暂存数据，减少每次合并链表操作申请空间的消耗</span>
+<span class="cm">     * </span>
+<span class="cm">     */</span>
+    <span class="n">fibonacci_node_pt</span> <span class="o">*</span><span class="n">cons</span><span class="p">;</span> 
+<span class="p">}</span> <span class="n">fibonacci_heap_t</span><span class="p">;</span>
+
+
+<span class="n">fibonacci_heap_pt</span> <span class="nf">fib_heap_new</span><span class="p">();</span>
+<span class="n">fibonacci_heap_pt</span> <span class="nf">fib_heap_union</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">fibonacci_heap_pt</span> <span class="n">h2</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_push</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">fib_heap_top</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_pop</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_update</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_delete</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_destroy</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_print</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">fib_heap_export_dot</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>fibonacci_heap.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* fibonacci_heap.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  fibonacci_heap.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  斐波那契堆实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-10-02 19:58</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"fibonacci_heap.h"</span><span class="cp"></span>
+
+<span class="cm">/* </span>
+<span class="cm"> * 最小堆 ((a) &gt; (b))</span>
+<span class="cm"> * 最大堆 ({a} &lt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) &gt; (b)) </span><span class="cm">/* 最小堆 */</span><span class="cp"></span>
+<span class="cp">#define item_equal(a, b) ((a) == (b)) </span><span class="cm">/* 相等比较 */</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> <span class="nf">fib_node_new</span><span class="p">(</span><span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_cat</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_add</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> <span class="nf">fib_heap_link</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_remove</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_cons_make</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_consolidate</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">heaplink</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">childlink</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> <span class="nf">fib_node_search</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_decrease</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_heap_increase</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_destroy</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_printnode</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">fib_node_print</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">tree_first_label</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> 
+<span class="nf">fib_node_new</span><span class="p">(</span><span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error: make fibonacci node failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="p">(</span><span class="n">fibonacci_node_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_node_t</span><span class="p">));</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span>   <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span>   <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span>  <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span>  <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">fibonacci_heap_pt</span>
+<span class="nf">fib_heap_new</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="p">(</span><span class="n">fibonacci_heap_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_heap_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error: make fibonacci heap failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">heap</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_node_cat</span>
+<span class="cm"> * Description:  把双链表n2连接到n1上</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_cat</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">n1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+
+    <span class="n">n2</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">fibonacci_heap_pt</span> 
+<span class="nf">fib_heap_union</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">fibonacci_heap_pt</span> <span class="n">h2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">h2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_cat</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">h1</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">h1</span><span class="o">-&gt;</span><span class="n">num</span> <span class="o">+=</span> <span class="n">h2</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">;</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">h2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_add</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_push</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">fib_node_new</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="o">++</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="kt">int</span>
+<span class="nf">fib_heap_top</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">value</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> 
+<span class="nf">fib_heap_link</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">n1</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">n2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">child</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">n2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">n2</span><span class="p">;</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">n1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//fib_node_add(root-&gt;child, child);</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">;</span>
+        <span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="n">root</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">child</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">child</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_node_remove</span>
+<span class="cm"> * Description:  从node的双向链表中移除节点node</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_remove</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cons_make</span>
+<span class="cm"> * Description:  生成堆的双链表调节所需要的空间</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cons_make</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">maxdegree</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">log</span><span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="p">)</span><span class="o">/</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">&gt;=</span> <span class="n">maxdegree</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">=</span> <span class="n">maxdegree</span><span class="p">;</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span> <span class="o">=</span> <span class="p">(</span><span class="n">fibonacci_node_pt</span><span class="o">*</span><span class="p">)</span><span class="n">realloc</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_consolidate</span>
+<span class="cm"> * Description:  堆的链表调整合并</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_consolidate</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">d</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+
+    <span class="n">fib_heap_cons_make</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+    <span class="n">next</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">fib_heap_link</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]);</span>
+            <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">degree</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+        <span class="n">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">maxdegree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_childlink_to_heaplink</span>
+<span class="cm"> * Description:  把子树的双链表连接到堆的双链表</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">heaplink</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">childlink</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">childlink</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//修改min指向儿子的双链表中的parent指针</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">childlink</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pos</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">childlink</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//把child指向的双链表连接到min指向的双链表上</span>
+    <span class="n">fib_node_cat</span><span class="p">(</span><span class="n">heaplink</span><span class="p">,</span> <span class="n">childlink</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_pop</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">min</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="n">min</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+
+    <span class="n">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">min</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+
+    <span class="n">fib_node_remove</span><span class="p">(</span><span class="n">min</span><span class="p">);</span>
+
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">num</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">min</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="n">fib_heap_consolidate</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">min</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">static</span> <span class="n">fibonacci_node_pt</span> 
+<span class="nf">fib_node_search</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">root</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_equal</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">res</span> <span class="o">=</span> <span class="n">fib_node_search</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">root</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cut</span>
+<span class="cm"> * Description:  把堆heap中其中一个树的子节点node切下连接到堆的双链表中</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_node_remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">parent</span><span class="o">-&gt;</span><span class="n">degree</span><span class="o">--</span><span class="p">;</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">fib_node_add</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_cascading_cut</span>
+<span class="cm"> * Description:  对堆heap的node节点进行级联剪切</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_decrease</span>
+<span class="cm"> * Description:  堆heap的node节点值减少为element</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_heap_decrease</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fib_heap_increase</span>
+<span class="cm"> * Description:  堆heap的node节点值增加为element</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span>
+<span class="nf">fib_heap_increase</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+
+    <span class="n">fib_childlink_to_heaplink</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">degree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fib_heap_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+        <span class="n">fib_heap_cascading_cut</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">parent</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_update</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">oldelement</span><span class="p">,</span> <span class="n">Item</span> <span class="n">newelement</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_equal</span><span class="p">(</span><span class="n">oldelement</span><span class="p">,</span> <span class="n">newelement</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">fib_node_search</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">oldelement</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">oldelement</span><span class="p">,</span> <span class="n">newelement</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">fib_heap_decrease</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fib_heap_increase</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">newelement</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_delete</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="n">value</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">fib_node_search</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="n">fib_heap_decrease</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">value</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">fib_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_destroy</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">fib_node_destroy</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span>  <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">node</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_destroy</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">fib_node_destroy</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">cons</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_printnode</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fib_node_print</span><span class="p">(</span><span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">h</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"---------------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">fib_node_printnode</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+        <span class="n">fib_node_print</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">node</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_print</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fib_node_print</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">fibonacci_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">tree_first_label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">pos</span><span class="p">;</span>
+
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">tree_first_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d, xlabel=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">marked</span><span class="p">);</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* 打印边 */</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="cm">/* 打印子节点 */</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree_first_label</span><span class="p">);</span>
+        <span class="cm">/* 打印兄弟节点 */</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d, xlabel=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">marked</span><span class="p">);</span>
+            <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+            <span class="c1">//export_dot(fp, pos, last_label, tree_first_label);</span>
+            <span class="cm">/* 打印子节点 */</span>
+            <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree_first_label</span><span class="p">);</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="cm">/* 打印子节点 */</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree_first_label</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">fib_heap_export_dot</span><span class="p">(</span><span class="n">fibonacci_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">fibonacci_node_pt</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">cluster_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">tree_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="kt">char</span> <span class="n">last_tree_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=circle];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"subgraph cluster_%d {</span><span class="se">\n</span><span class="s">pencolor=green;label=</span><span class="se">\"</span><span class="s">树%d</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">cluster_num</span><span class="p">,</span> <span class="n">cluster_num</span><span class="p">);</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">last_tree_name</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">tree_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tree_name</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">));</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="n">cluster_num</span><span class="o">++</span><span class="p">;</span> 
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">tree_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">last_tree_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[constraint=false];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_tree_name</span><span class="p">,</span> <span class="n">tree_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">tree</span> <span class="o">!=</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>fibonacci_heap.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* fibonacci_heap_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"fibonacci_heap.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">26</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">23</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">21</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">alen</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">blen</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">clen</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+    <span class="n">fibonacci_heap_pt</span> <span class="n">ha</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">hb</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">hc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">ha</span> <span class="o">=</span> <span class="n">fib_heap_new</span><span class="p">();</span>
+    <span class="n">hb</span> <span class="o">=</span> <span class="n">fib_heap_new</span><span class="p">();</span>
+
+    <span class="cm">/* 以下测试代码主要创建一个ha的堆 */</span>
+    <span class="n">alen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 斐波那契堆(ha)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">alen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">fib_heap_push</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(ha)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">fib_heap_pop</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(ha)的删除最小值后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_print</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="n">fib_heap_update</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">17</span><span class="p">);</span>
+
+    <span class="cm">/* 以下测试代码主要创建一个hb的堆 */</span>
+    <span class="n">alen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">blen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 斐波那契堆(hb)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">blen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">fib_heap_push</span><span class="p">(</span><span class="n">hb</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">fib_heap_pop</span><span class="p">(</span><span class="n">hb</span><span class="p">);</span>
+
+    <span class="n">clen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== 斐波那契堆(hb)中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">clen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">fib_heap_push</span><span class="p">(</span><span class="n">hb</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">fib_heap_push</span><span class="p">(</span><span class="n">hb</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="n">clen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(hb)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+    <span class="cm">/* 以下合并两个堆，并生成一个跟"算法导论"中图解相似节点的树。^_^ 当然还是有些不一样 */</span>
+    <span class="n">alen</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">hc</span> <span class="o">=</span> <span class="n">fib_heap_union</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="n">hb</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(hc)的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"union.dot"</span><span class="p">,</span> <span class="s">"合并结果"</span><span class="p">);</span>
+
+    <span class="n">fib_heap_top</span><span class="p">(</span><span class="n">ha</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(ha)的最小值: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+
+    <span class="n">fib_heap_pop</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(ha)的删除最小值后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_print</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="n">fib_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"pop.dot"</span><span class="p">,</span> <span class="s">"删除最小值"</span><span class="p">);</span>
+
+    <span class="n">fib_heap_update</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">60</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(hc)的修改节点23为60后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_print</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="n">fib_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"increase.dot"</span><span class="p">,</span> <span class="s">"增加数值"</span><span class="p">);</span>
+
+    <span class="n">fib_heap_update</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+    <span class="n">fib_heap_update</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">22</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 斐波那契堆(hc)的修改节点35为22后的详细信息: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fib_heap_print</span><span class="p">(</span><span class="n">hc</span><span class="p">);</span>
+    <span class="n">fib_heap_export_dot</span><span class="p">(</span><span class="n">hc</span><span class="p">,</span> <span class="s">"decrease.dot"</span><span class="p">,</span> <span class="s">"减少数值"</span><span class="p">);</span>
+
+    <span class="n">fib_heap_destroy</span><span class="p">(</span><span class="n">ha</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>fibonacci_heap_test.c</p>
+<h3 id="_10"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> 斐波那契堆<span class="o">(</span>ha<span class="o">)</span>中依次添加: <span class="m">3</span> <span class="m">52</span> <span class="m">38</span> <span class="m">41</span> <span class="m">19</span> <span class="m">30</span> <span class="m">39</span> <span class="m">18</span> <span class="nv">1</span> 
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>ha<span class="o">)</span>的详细信息: 
+---------------------------
+1
+---------------------------
+3
+---------------------------
+52
+---------------------------
+38
+---------------------------
+41
+---------------------------
+19
+---------------------------
+30
+---------------------------
+39
+---------------------------
+<span class="nv">18</span>
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>ha<span class="o">)</span>的删除最小值后的详细信息: 
+---------------------------
+3
+    18
+        19
+            30
+        39
+    38
+        41
+    <span class="nv">52</span>
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>hb<span class="o">)</span>中依次添加: <span class="m">26</span> <span class="m">35</span> <span class="m">24</span> <span class="m">46</span> <span class="nv">2</span> <span class="o">==</span> 斐波那契堆<span class="o">(</span>hb<span class="o">)</span>中依次添加: <span class="m">23</span> <span class="nv">7</span> 
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>hb<span class="o">)</span>的详细信息:
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>hc<span class="o">)</span>的详细信息:
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>ha<span class="o">)</span>的最小值: <span class="nv">3</span>
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>ha<span class="o">)</span>的删除最小值后的详细信息: 
+---------------------------
+7
+    23
+        52
+    21
+---------------------------
+17
+    30
+---------------------------
+18
+    24
+        35
+            46
+        26
+    38
+        41
+    <span class="nv">39</span>
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>hc<span class="o">)</span>的修改节点23为60后的详细信息: 
+---------------------------
+7
+    21
+---------------------------
+52
+---------------------------
+17
+    30
+---------------------------
+18
+    24
+        35
+            46
+        26
+    38
+        41
+    39
+---------------------------
+<span class="nv">60</span>
+
+<span class="o">==</span> 斐波那契堆<span class="o">(</span>hc<span class="o">)</span>的修改节点35为22后的详细信息: 
+---------------------------
+7
+    21
+---------------------------
+52
+---------------------------
+17
+    30
+---------------------------
+18
+    38
+        41
+    39
+---------------------------
+60
+---------------------------
+20
+---------------------------
+22
+    46
+---------------------------
+24
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图一" src="/images/fibonacci_heap/union.png"/></p>
+<p><img alt="图二" src="/images/fibonacci_heap/pop.png"/></p>
+<p><img alt="图三" src="/images/fibonacci_heap/increase.png"/></p>
+<p><img alt="图四" src="/images/fibonacci_heap/decrease.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-06(星期四) 01:01  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

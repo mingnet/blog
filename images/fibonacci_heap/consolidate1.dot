@@ -1,0 +1,66 @@
+digraph g{
+node[shape=circle];
+label="调整图1";
+labeljust=l;
+labelloc=t;
+subgraph cluster_array { penwidth=0; narray[label=" <f0>  nil | <f1>  nil | <f2>  nil | <f3>  nil | <f4>  nil ", shape=record]; }
+subgraph cluster_0 {
+pencolor=green;label="树0";
+n110[label=17, xlabel=0];
+n111[label=30, xlabel=0];
+n110->n111;
+}
+narray->n110[style=invis];
+subgraph cluster_1 {
+pencolor=green;label="树1";
+n112[label=38, xlabel=0];
+n113[label=41, xlabel=0];
+n112->n113;
+}
+n110->n112[constraint=false];
+narray->n112[style=invis];
+subgraph cluster_2 {
+pencolor=green;label="树2";
+n114[label=52, xlabel=0];
+}
+n112->n114[constraint=false];
+narray->n114[style=invis];
+subgraph cluster_3 {
+pencolor=green;label="树3";
+n115[label=18, xlabel=1];
+n116[label=39, xlabel=0];
+n115->n116;
+}
+n114->n115[constraint=false];
+narray->n115[style=invis];
+subgraph cluster_4 {
+pencolor=green;label="树4";
+n117[label=23, xlabel=0];
+}
+n115->n117[constraint=false];
+narray->n117[style=invis];
+subgraph cluster_5 {
+pencolor=green;label="树5";
+n118[label=24, xlabel=0];
+n119[label=35, xlabel=0];
+n118->n119;
+n120[label=46, xlabel=0];
+n119->n120;
+n121[label=26, xlabel=0];
+n118->n121;
+}
+n117->n118[constraint=false];
+narray->n118[style=invis];
+subgraph cluster_6 {
+pencolor=green;label="树6";
+n122[label=21, xlabel=0];
+}
+n118->n122[constraint=false];
+narray->n122[style=invis];
+subgraph cluster_7 {
+pencolor=green;label="树7";
+n123[label=7, xlabel=0];
+}
+n122->n123[constraint=false];
+narray->n123[style=invis];
+}

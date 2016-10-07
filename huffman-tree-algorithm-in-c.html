@@ -1,0 +1,658 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>哈夫曼树的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">哈夫曼树的构建图文说明</a></li>
+<li><a href="#_2">哈夫曼树的构建代码</a></li>
+<li><a href="#_3">完整源码</a></li>
+<li><a href="#_4">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>哈夫曼树是最优二叉树。定义：给定n个权值作为n个叶子节点，构造一棵二叉树，若树的带树路径长度最小，则这棵树被称为哈夫曼树。如下图。</p>
+<p><img alt="图一" src="/images/huffman_tree/huffman.png"/></p>
+<p>哈夫曼树涉及的几个概念</p>
+<p><strong>路径和路径长度</strong>：在一棵树中，从一个结点往下可以到达孩子或孙子结点之间的通路，称为路径。通路中结点的数目称为路径长度。如15的路径长度是1；5,6,7,8的路径长度是3。</p>
+<p><strong>结点的权及带权路径长度</strong>: 若将树中结点赋给一个有着某种含义的数值，则这个数值称为该结点的权。结点的带权路径长度为：从根结点到该结点之间的路径长度与该结点的权的乘积。如节点5的的路径长度是3，它的带权路径长度为3x5=15。</p>
+<p><strong>树的带权路径长度</strong>: 树的带树路径长度规定为所有叶子结点的带权路径长度之和。上图中，树的带权路径之和是15x1 + 5x3 + 6x3 + 7x3 + 8x3 = 93。</p>
+<p>pairing堆的数据结构一般如下：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">huffman_tree_s</span><span class="o">*</span> <span class="n">huffman_tree_pt</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">huffman_tree_s</span> <span class="p">{</span>
+    <span class="n">Key</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">parent</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">huffman_tree_t</span><span class="p">;</span>
+</pre></div>
+<h3 id="_1"><strong> 哈夫曼树的构建图文说明 </strong></h3>
+<ol>
+<li>将所有结点看成是一个森林。</li>
+<li>从森林中取出根结点的权值最小的两棵树进行合并，取出的两棵树作为一个新生成树的左右子树，且新树的权值是左右两个子树之和。</li>
+<li>从森林中删除这两棵树，并将新树加入森林。</li>
+<li>重复2,3步，直到只剩最后一棵树，这棵树就是哈夫曼树。</li>
+</ol>
+<p>如下图所示：</p>
+<p><img alt="图一" src="/images/huffman_tree/create1.png"/></p>
+<p><img alt="图二" src="/images/huffman_tree/create2.png"/></p>
+<p><img alt="图三" src="/images/huffman_tree/create3.png"/></p>
+<p><img alt="图四" src="/images/huffman_tree/create4.png"/></p>
+<p><img alt="图五" src="/images/huffman_tree/create5.png"/></p>
+<h3 id="_2"><strong> 哈夫曼树的构建代码 </strong></h3>
+<p>一般使用最小堆来构建森林并选取最小树。源码实现中使用了以前的二叉堆的代码。代码如下:</p>
+<div class="highlight"><pre><span></span><span class="n">huffman_tree_pt</span> 
+<span class="nf">huffman_create</span><span class="p">(</span><span class="n">Key</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binary_heap_init</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">huffman_new</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">tree</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">huffman_new</span><span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">+</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="n">left</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+        <span class="n">right</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span> <span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_3"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* binary_heap.h */</span>
+<span class="cp">#ifndef BINARY_HEAP_H</span>
+<span class="cp">#define BINARY_HEAP_H</span>
+
+<span class="cp">#include</span> <span class="cpf">"huffman_tree.h"</span><span class="cp"></span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">huffman_tree_s</span><span class="o">*</span> <span class="n">huffman_tree_pt</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span><span class="o">*</span> <span class="n">binary_heap_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="n">huffman_tree_pt</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">binary_heap_t</span><span class="p">;</span>
+
+<span class="n">binary_heap_pt</span> <span class="nf">binary_heap_init</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binary_heap_free</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">binary_heap_push</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">Item</span> <span class="nf">binary_heap_pop</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="n">Item</span> <span class="nf">binary_heap_top</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">binary_heap_empty</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">binary_heap_destroy</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>binary_heap.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* binary_heap.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  binary_heap.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  二叉堆实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-09-19 20:08</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binary_heap.h"</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">swap</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Item</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> * 最小堆 ((a) &gt; (b))</span>
+<span class="cm"> * 最大堆 ({a} &lt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) (((a)-&gt;data) &gt; ((b)-&gt;data)) </span><span class="cm">/* 最小堆 */</span><span class="cp"></span>
+
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fixup</span>
+<span class="cm"> * Description:  向上堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixup</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  fixdown</span>
+<span class="cm"> * Description:  向下堆化</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">fixdown</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">temp</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">binary_heap_pt</span> 
+<span class="nf">binary_heap_init</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">binary_heap_pt</span> <span class="n">heap_pt</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">binary_heap_t</span><span class="p">));</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+    <span class="n">heap_pt</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">heap_pt</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binary_heap_free</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">binary_heap_push</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">==</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">fixup</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="o">++</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">binary_heap_pop</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">fixdown</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="o">--</span><span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> 
+<span class="nf">binary_heap_top</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span>
+<span class="nf">binary_heap_empty</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">heap</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">binary_heap_destroy</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>binary_heap.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* huffman_tree.h */</span>
+<span class="cp">#ifndef HUffMAN_TREE_H</span>
+<span class="cp">#define HUffMAN_TREE_H</span>
+
+<span class="cp">#include</span> <span class="cpf">"binary_heap.h"</span><span class="cp"></span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Key</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span><span class="o">*</span> <span class="n">binary_heap_pt</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">huffman_tree_s</span><span class="o">*</span> <span class="n">huffman_tree_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">huffman_tree_s</span> <span class="p">{</span>
+    <span class="n">Key</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">parent</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">huffman_tree_t</span><span class="p">;</span>
+
+<span class="n">huffman_tree_pt</span> <span class="nf">huffman_create</span><span class="p">(</span><span class="n">Key</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">huffman_destroy</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">huffman_print</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">heap</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">huffman_tree_export_dot</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>huffman_tree.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* huffman_tree.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  huffman_tree.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  哈夫曼树实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-10-07 20:09</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"binary_heap.h"</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">"huffman_tree.h"</span><span class="cp"></span>
+
+<span class="k">static</span> <span class="n">huffman_tree_pt</span> <span class="nf">huffman_new</span><span class="p">(</span><span class="n">Key</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">clean_heap</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">);</span>
+
+
+<span class="k">static</span> <span class="n">huffman_tree_pt</span> 
+<span class="nf">huffman_new</span><span class="p">(</span><span class="n">Key</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="p">(</span><span class="n">huffman_tree_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">huffman_tree_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error: make new huffman node failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">clean_heap</span><span class="p">(</span><span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">binary_heap_empty</span><span class="p">(</span><span class="n">heap</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">huffman_destroy</span><span class="p">(</span><span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="n">binary_heap_destroy</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">huffman_tree_pt</span> 
+<span class="nf">huffman_create</span><span class="p">(</span><span class="n">Key</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">binary_heap_pt</span> <span class="n">heap</span><span class="p">;</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">binary_heap_init</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">huffman_new</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">tree</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">huffman_new</span><span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">+</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="n">left</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+        <span class="n">right</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">binary_heap_push</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span> <span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">binary_heap_pop</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="n">clean_heap</span><span class="p">(</span><span class="n">heap</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">huffman_destroy</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">huffman_destroy</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">huffman_destroy</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">huffman_tree_printnode</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">huffman_tree_show</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">huffman_tree_printnode</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">huffman_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">huffman_tree_printnode</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+    <span class="n">huffman_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">huffman_print</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">huffman_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="cm">/* 打印边 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">huffman_tree_export_dot</span><span class="p">(</span><span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=circle];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>huffman_tree.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* huffman_tree_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"huffman_tree.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">15</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">huffman_tree_pt</span> <span class="n">tree</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">== 建立哈夫曼树: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">huffman_create</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
+    <span class="n">huffman_print</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+    <span class="n">huffman_tree_export_dot</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s">"huffman.dot"</span><span class="p">,</span> <span class="s">"哈夫曼树"</span><span class="p">);</span>
+
+    <span class="n">huffman_destroy</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>huffman_tree_test.c</p>
+<h3 id="_4"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> 建立哈夫曼树: 
+        *
+    15
+        *
+41
+                *
+            5
+                *
+        11
+                *
+            6
+                *
+    26
+                *
+            7
+                *
+        15
+                *
+            8
+                *
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图一" src="/images/huffman_tree/huffman.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-07(星期五) 22:10  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

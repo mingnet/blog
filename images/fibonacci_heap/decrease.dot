@@ -1,0 +1,57 @@
+digraph g{
+node[shape=circle];
+label="减少数值";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="树0";
+n43[label=7, xlabel=0];
+n44[label=21, xlabel=0];
+n43->n44;
+}
+subgraph cluster_1 {
+pencolor=green;label="树1";
+n45[label=52, xlabel=0];
+}
+n43->n45[constraint=false];
+subgraph cluster_2 {
+pencolor=green;label="树2";
+n46[label=17, xlabel=0];
+n47[label=30, xlabel=0];
+n46->n47;
+}
+n45->n46[constraint=false];
+subgraph cluster_3 {
+pencolor=green;label="树3";
+n48[label=18, xlabel=1];
+n49[label=38, xlabel=0];
+n48->n49;
+n50[label=41, xlabel=0];
+n49->n50;
+n51[label=39, xlabel=0];
+n48->n51;
+}
+n46->n48[constraint=false];
+subgraph cluster_4 {
+pencolor=green;label="树4";
+n52[label=60, xlabel=0];
+}
+n48->n52[constraint=false];
+subgraph cluster_5 {
+pencolor=green;label="树5";
+n53[label=20, xlabel=0];
+}
+n52->n53[constraint=false];
+subgraph cluster_6 {
+pencolor=green;label="树6";
+n54[label=22, xlabel=0];
+n55[label=46, xlabel=0];
+n54->n55;
+}
+n53->n54[constraint=false];
+subgraph cluster_7 {
+pencolor=green;label="树7";
+n56[label=24, xlabel=0];
+}
+n54->n56[constraint=false];
+}

@@ -1,0 +1,29 @@
+digraph g{
+node[shape=circle];
+label="图1";
+labeljust=l;
+labelloc=t;
+n160[label=4];
+n161[label=19];
+n160->n161;
+n162[label=30];
+n160->n162;
+n163[label=18];
+n160->n163;
+n164[label=24];
+n160->n164;
+n165[label=46];
+n164->n165;
+n166[label=26];
+n164->n166;
+n167[label=35];
+n166->n167;
+n168[label=39];
+n162->n168;
+n169[label=38,style = filled,color="tomato"];
+n161->n169;
+n170[label=41];
+n161->n170;
+n171[label=52];
+n169->n171;
+}

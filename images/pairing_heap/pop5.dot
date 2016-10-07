@@ -1,0 +1,45 @@
+digraph g{
+node[shape=circle];
+label="图5";
+labeljust=l;
+labelloc=t;
+nt1[label="链表一",shape=plaintext];
+subgraph cluster_0 {
+pencolor=green;label="";
+n88[label=38];
+}
+subgraph cluster_1 {
+pencolor=green;label="";
+n89[label=52];
+}
+n88->n89[constraint=false];
+nt2[label="链表二",shape=plaintext];
+subgraph cluster_2 {
+pencolor=green;label="";
+n90[label=4];
+n91[label=18];
+n90->n91;
+n92[label=24];
+n90->n92;
+n93[label=46];
+n92->n93;
+n94[label=26];
+n92->n94;
+n95[label=35];
+n94->n95;
+}
+subgraph cluster_3 {
+pencolor=green;label="";
+n96[label=30];
+n97[label=39];
+n96->n97;
+}
+n90->n96[constraint=false];
+subgraph cluster_4 {
+pencolor=green;label="";
+n98[label=19];
+n99[label=41];
+n98->n99;
+}
+n96->n98[constraint=false];
+}

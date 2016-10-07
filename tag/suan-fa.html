@@ -60,14 +60,9 @@
 							<li ><a href="/category/suan-fa.html">算法</a></li>
                         <!--
 						<li><label>Links</label></li>
-							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
 							<li><a href="http://coolshell.cn">酷 壳</a></li>
-							<li><a href="http://www.itzhai.com">IT 宅</a></li>
-							<li><a href="http://hedengcheng.com">何登成的技术博客</a></li>
-							<li><a href="http://www.raychase.net">四火的唠叨</a></li>
 							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
-							<li><a href="http://blog.zhaojie.me">老赵点滴 - 追求编程之美</a></li>
-							<li><a href="http://dbanotes.net">Fenng</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
                         -->
 
 
@@ -113,6 +108,39 @@
         <div class="medium-9 small-12 columns" role="content">
 
 <article>
+	<h3><a href="/huffman-tree-algorithm-in-c.html">哈夫曼树的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-07(星期五) 22:10  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>哈夫曼树是最优二叉树。定义：给定n个权值作为n个叶子节点，构造一棵二叉树，若树的带树路径长度最小，则这棵树被称为哈夫曼树。如下图。</p>
+<p><img alt="图一" src="/images/huffman_tree/huffman.png"/></p>
+<p>哈夫曼树涉及的几个概念</p>
+<p><strong>路径和路径长度</strong>：在一棵树中，从一个结点往下可以到达孩子或孙子结点之间的通路，称为路径。通路中结点的数目称为路径长度。如15的路径长度是1；5,6,7,8的路径长度是3。</p>
+<p><strong>结点的权及带权路径长度</strong>: 若将树中结点赋给一个有着某种含义的数值 ...</p>
+		<p class="continue"><a href="/huffman-tree-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
+	<h3><a href="/pairing-heap-algorithm-in-c.html">pairing堆的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-07(星期五) 16:31  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>斐波那契堆编程实现难度较大并且效率没有理论的快(由于它的存储结构和四个指针)。pairing堆可以弥补斐波那契堆的缺点，编程比较简单且时间复杂度跟斐波那契堆相同。</p>
+<p>pairing堆是一棵多路树，类似于左倾堆和斜堆，与二项堆和斐波那契堆不同。它的基本操作是两个多路树的连接，所以取名叫pairing堆。</p>
+<p>关于pairing堆的完整中文资料比较少，但国外还是挺容易找到的。以下的实现参考cise.ufl.edu一些公开课资料的讲解。</p>
+<h3 id="pairing"><strong> pairing堆的数据结构定义 </strong></h3>
+<p>pairing堆的数据结构一般如下：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">pairing_heap_s</span> <span class="o">*</span><span class="n">pairing_heap_pt ...</span></pre></div>
+		<p class="continue"><a href="/pairing-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
+	<h3><a href="/fibonacci-heap-algorithm-in-c.html">斐波那契堆的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-06(星期四) 01:01  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>斐波那契堆同二项堆一样,也是一种可合并堆。斐波那契堆的优势是：不涉及删除元素的操作仅需要O（1）的平摊运行时间。和二项堆一样，斐波那契堆由一组树构成。这种堆松散地基于二项堆，说松散是因为：如果不对斐波那契堆做任何DECREASE-KEY 或 DELETE 操作，则堆中每棵树就和二项树一样；但是如果执行这两种操作，在一些状态下必须要破坏二项树的特征，比如DECREASE-KEY或DELETE 后，有的树高为k ...</p>
+		<p class="continue"><a href="/fibonacci-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
 	<h3><a href="/binomial-heap-algorithm-in-c.html">二项堆的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-01(星期六) 16:41  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
@@ -126,19 +154,7 @@
 </ol>
 <p>如下图所示：</p>
 <p><img alt="图一" src="/images/binomial_heap/tree.png"/></p>
-<p>上图的B0,B1,B2,B3,B4都是二项树，B0有一节点，B1由两B0组成，B2由两B1组成，B3由两B2组成，B4由两B3组成；而且，当两颗相同的二项树组成一棵树时，其中一棵树是另一棵树的最左孩子。</p>
-<p>二项树有如下性质：</p>
-<ol>
-<li>BK共有2^K个节点</li>
-<li>BK的高度是K</li>
-<li>BK在深度i处有C(K,i)个节点，其中i=0,1,2,....,K</li>
-<li>根的度为K，它大于任何其它节点的度数</li>
-</ol>
-<h3 id="_2"><strong> 二项堆 </strong></h3>
-<p>二项堆一般用来实现优先队列，是由满足以下性质的二项树构成：</p>
-<ol>
-<li>每棵二项树都满足堆的性质</li>
-<li>不能有两棵以上的二项树具有相同的度数 ...</li></ol>
+<p>上图的B0,B1,B2 ...</p>
 		<p class="continue"><a href="/binomial-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
@@ -151,22 +167,6 @@
 <div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="o">*</span><span class="n">skew_heap_pt</span><span class="p">;</span>
 
 <span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="p">{</span>  
-    <span class="n">skew_heap_pt</span> <span class="n">left</span><span class="p">;</span>
-    <span class="n">skew_heap_pt</span> <span class="n">right</span><span class="p">;</span>  
-    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">skew_heap_t</span><span class="p">;</span>
-</pre></div>
-<h3 id="_1"><strong> 合并操作图解 </strong></h3>
-<p>与左倾堆相同，合并操作也是斜堆的重点。合并两个斜堆的过程如下：</p>
-<ol>
-<li>如果一个空斜堆与非空斜堆合并，返回非空斜堆</li>
-<li>如果两个斜都非空，比较两个根节点，取优先级高的根节点为新的根节点。将“优先级较高堆的根节点的右孩子”和“优先级底的堆”进行合并</li>
-<li>合并后，交换新堆根节点的左孩子和右孩子</li>
-</ol>
-<p>代码实现如下</p>
-<div class="highlight"><pre><span></span><span class="n">skew_heap_pt</span> 
-<span class="nf">skew_heap_merge</span><span class="p">(</span><span class="n">skew_heap_pt</span> <span class="n">h1</span><span class="p">,</span> <span class="n">skew_heap_pt</span> <span class="n">h2</span><span class="p">)</span>
-<span class="p">{</span>
     <span class="n">skew_heap_pt ...</span></pre></div>
 		<p class="continue"><a href="/skew-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
@@ -175,18 +175,7 @@
 	<h3><a href="/leftist-heap-algorithm-in-c.html">左倾堆的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-24(星期六) 13:47  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
-<p>左倾堆(leftist tree 或 leftist heap)又称为左式堆，左偏树，左偏堆，最左堆等。左倾堆是优先队列的一种实现方式，当优先队列需要解决“两个优先队列合并”的问题时，二叉堆的效率就比较差了，这时左倾堆等方式可以很好的解决这类问题。左倾堆合并时间复杂度为O(lgn)。左倾堆在统计问题，最值问题，模拟问题和贪心问题等问题中有广泛的应用。
-左倾堆是二叉树，另外还有两个属性，键值和零距离。</p>
-<p><strong>键值</strong>用来比较节点的大小<br/>
-<strong>零距离</strong>(NPL)是 null path length 的缩写，指的是从该结点到达一个没有两个孩子的结点（一个或无孩子）的最短距离，叶节点的NPL为0, NULL的NPL为-1。</p>
-<p>左倾堆的性质</p>
-<ol>
-<li>节点的优先级大于或等于它子节点的优先级  </li>
-<li>任意节点左孩子的NPL &gt;= 右孩子的NPL  </li>
-<li>节点的NPL = 它的右孩子的NPL + 1  </li>
-</ol>
-<p>左倾堆的定义</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">leftist_heap_s</span> <span class="o">*</span><span class="n">leftist_heap_pt ...</span></pre></div>
+<p>左倾堆(leftist tree 或 leftist heap)又称为左式堆，左偏树，左偏堆，最左堆等。左倾堆是优先队列的一种实现方式，当优先队列需要解决“两个优先队列合并”的问题时，二叉堆的效率就比较差了，这时左倾堆等方式可以很好的解决这类问题。左倾堆合并时间复杂度为O(lgn)。左倾堆在统计问题，最值问题 ...</p>
 		<p class="continue"><a href="/leftist-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
@@ -197,20 +186,7 @@
 <p>D堆是二叉堆的简单推广，跟二叉堆的区别是所有的节点都有d个儿子，代码也跟二叉堆的相似。下图表示一个D=3的最小D堆。</p>
 <p><img alt="图" src="/images/d_heap/heap.png"/></p>
 <p>D堆插入操作的时间改进为O(log(d,N)),然面删除操作要花费较大时间，一般需要O(d*log(d,N))。如果D不是2的幂，也不能通过二进制移位来实现乘法和除法，这样也大大增加运行时间。
-大部分时候总是使用二叉堆，但D堆也在一些情况下使用。比如，插入操作多删除操作多很多时，或是<strong><em>优先队列太大不能完全装入内存</em></strong>时。</p>
-<p>通常D堆也跟二叉堆一样以数组存储，层为 log(d,n)，以下的代码来定义D堆结构。</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">d_heap_s</span><span class="o">*</span> <span class="n">d_heap_pt</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">d_heap_s</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">degree</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
-    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">d_heap_t</span><span class="p">;</span>
-</pre></div>
-<p>当以数组存储时，D堆的父子节点下标存在如下关系。</p>
-<ul>
-<li>索引为i的孩子的索引是 ...</li></ul>
+大部分时候总是使用二叉堆，但D堆也在一些情况下使用 ...</p>
 		<p class="continue"><a href="/d-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
@@ -221,24 +197,7 @@
 <p>堆是一颗完全树，同时满足每个节点均大于或小于它的子节点，这样的数据结构被称为最大堆或者最小堆。
 这种结构处于一种半排序状态，它的存取效率从整体上讲介于有序和无序之间。当对象处于动态时，是种非常有优势的数据结构。存取的时间复杂为log(a,n),其中a为完全树的度。</p>
 <p>通常二叉堆以数组存储，层为 log(2,n)，可以使用以下的代码来定义二叉堆结构。</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span><span class="o">*</span> <span class="n">binary_heap_pt</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
-    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">binary_heap_t</span><span class="p">;</span>
-</pre></div>
-<p>当以数组存储时，二叉堆的父子节点下标存在如下关系。</p>
-<p>第一个元素索引为0: </p>
-<ul>
-<li>索引为i的左孩子的索引是 (2*i+1);</li>
-<li>索引为i的右孩子的索引是 (2*i+2);</li>
-<li>索引为i的父结点的索引是 floor((i-1)/2);</li>
-</ul>
-<p>第一个元素索引为1: </p>
-<ul>
-<li>索引为i的左孩子的索引是 (2*i ...</li></ul>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s ...</span></pre></div>
 		<p class="continue"><a href="/binary-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
@@ -251,7 +210,7 @@
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">5</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">8</span></a></li>
                 </ul>
             </div>
 
@@ -266,14 +225,9 @@
             <div class="panel radius">
                 <h5>Links</h5>
                 <ul class="side-nav">
-                    <li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
                     <li><a href="http://coolshell.cn">酷 壳</a></li>
-                    <li><a href="http://www.itzhai.com">IT 宅</a></li>
-                    <li><a href="http://hedengcheng.com">何登成的技术博客</a></li>
-                    <li><a href="http://www.raychase.net">四火的唠叨</a></li>
                     <li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
-                    <li><a href="http://blog.zhaojie.me">老赵点滴 - 追求编程之美</a></li>
-                    <li><a href="http://dbanotes.net">Fenng</a></li>
+                    <li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
                 </ul>
             </div>
 

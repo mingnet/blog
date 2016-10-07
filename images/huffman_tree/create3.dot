@@ -1,0 +1,30 @@
+digraph g{
+node[shape=circle];
+label="图3";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="";
+n12[label=11];
+n13[label=5];
+n12->n13;
+n14[style=invis];
+n12->n14[style=invis];
+n15[label=6];
+n12->n15;
+}
+subgraph cluster_1 {
+pencolor=green;label="";
+n16[label=15];
+}
+subgraph cluster_2 {
+pencolor=green;label="";
+n17[label=15];
+n18[label=7];
+n17->n18;
+n19[style=invis];
+n17->n19[style=invis];
+n20[label=8];
+n17->n20;
+}
+}

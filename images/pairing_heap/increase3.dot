@@ -1,0 +1,36 @@
+digraph g{
+node[shape=circle];
+label="图3";
+labeljust=l;
+labelloc=t;
+nt1[label="堆一",shape=plaintext];
+subgraph cluster_1 {
+pencolor=green;label="";
+n184[label=4];
+n185[label=19];
+n184->n185;
+n186[label=30];
+n184->n186;
+n187[label=18];
+n184->n187;
+n188[label=24];
+n184->n188;
+n189[label=46];
+n188->n189;
+n190[label=26];
+n188->n190;
+n191[label=35];
+n190->n191;
+n192[label=39];
+n186->n192;
+n193[label=41];
+n185->n193;
+}
+nt2[label="堆二",shape=plaintext];
+subgraph cluster_2 {
+pencolor=green;label="";
+n194[label=12,style = filled,color="tomato"];
+n195[label=52];
+n194->n195;
+}
+}

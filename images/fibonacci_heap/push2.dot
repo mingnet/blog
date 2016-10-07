@@ -1,0 +1,31 @@
+digraph g{
+node[shape=circle];
+label="图2";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="树0";
+n14[label=7, xlabel=0];
+}
+subgraph cluster_1 {
+pencolor=green;label="树1";
+n15[label=23, xlabel=0];
+}
+n14->n15[constraint=false];
+subgraph cluster_2 {
+pencolor=green;label="树2";
+n16[label=24, xlabel=0];
+n17[label=35, xlabel=0];
+n16->n17;
+n18[label=46, xlabel=0];
+n17->n18;
+n19[label=26, xlabel=0];
+n16->n19;
+}
+n15->n16[constraint=false];
+subgraph cluster_3 {
+pencolor=green;label="树3";
+n20[label=21, xlabel=0,style = filled,color="tomato"];
+}
+n16->n20[constraint=false];
+}

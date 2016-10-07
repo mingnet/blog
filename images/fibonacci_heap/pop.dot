@@ -1,0 +1,42 @@
+digraph g{
+node[shape=circle];
+label="删除最小值";
+labeljust=l;
+labelloc=t;
+subgraph cluster_0 {
+pencolor=green;label="树0";
+n250[label=7, xlabel=0];
+n251[label=23, xlabel=0];
+n250->n251;
+n252[label=52, xlabel=0];
+n251->n252;
+n253[label=21, xlabel=0];
+n250->n253;
+}
+subgraph cluster_1 {
+pencolor=green;label="树1";
+n254[label=17, xlabel=0];
+n255[label=30, xlabel=0];
+n254->n255;
+}
+n250->n254[constraint=false];
+subgraph cluster_2 {
+pencolor=green;label="树2";
+n256[label=18, xlabel=1];
+n257[label=24, xlabel=0];
+n256->n257;
+n258[label=35, xlabel=0];
+n257->n258;
+n259[label=46, xlabel=0];
+n258->n259;
+n260[label=26, xlabel=0];
+n257->n260;
+n261[label=38, xlabel=0];
+n256->n261;
+n262[label=41, xlabel=0];
+n261->n262;
+n263[label=39, xlabel=0];
+n256->n263;
+}
+n254->n256[constraint=false];
+}
