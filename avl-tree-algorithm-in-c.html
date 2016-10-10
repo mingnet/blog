@@ -1,0 +1,766 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>AVL树的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#avl">失去平衡的AVL树</a></li>
+<li><a href="#avl_1">AVL树的旋转</a></li>
+<li><a href="#avl_2">AVL树的插入</a></li>
+<li><a href="#avl_3">AVL树的删除</a></li>
+<li><a href="#_1">完整源码</a></li>
+<li><a href="#_2">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>AVL树是根据它的发明者G.M.Adelson-Velsky和E.M.Landis命名的。
+它是最先发明的自平衡二叉查找杩，也被称为高度平衡树。AVL树中任何节点的两个子树的高度最大差别为1。
+AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))。</p>
+<p>AVL树的一般定义：</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">avl_tree_s</span><span class="o">*</span> <span class="n">avl_tree_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">avl_tree_s</span> <span class="p">{</span>
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">;</span>
+    <span class="n">avl_tree_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">avl_tree_pt</span> <span class="n">right</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">avl_tree_t</span><span class="p">;</span>
+</pre></div>
+<h3 id="avl"><strong> 失去平衡的AVL树 </strong></h3>
+<p>如果在AVL树中插入或删除节点后，可能导致AVL树失衡，即树的左右高度差大于1。这时就需要对其进行旋转处理。</p>
+<p>这种失去平衡的树可能有4种姿态：LL(左左),LR(左右),RR(右右),RL(右左)</p>
+<p><strong>LL(左左)</strong>: 插入或删除一个节点后，左子树的高度比右子树的高度大2，且左子树的左子树的高度比左子树的右子树的高度大。如图所示</p>
+<p><img alt="图一" src="/images/avl_tree/avl_ll.png"/></p>
+<p><strong>RR(右右)</strong>: 插入或删除一个节点后，右子树的高度比左子树的高度大2，且右子树的右子树的高度比右子树的左子树的高度大。如图所示</p>
+<p><img alt="图二" src="/images/avl_tree/avl_rr.png"/></p>
+<p><strong>LR(左右)</strong>: 插入或删除一个节点后，左子树的高度比右子树的高度大2，且左子树的左子树的高度比左子树的右子树的高度小。如图所示</p>
+<p><img alt="图三" src="/images/avl_tree/avl_lr.png"/></p>
+<p><strong>RL(右左)</strong>: 插入或删除一个节点后，右子树的高度比左子树的高度大2，且右子树的右子树的高度比右子树的左子树的高度小。如图所示</p>
+<p><img alt="图四" src="/images/avl_tree/avl_rl.png"/></p>
+<h3 id="avl_1"><strong> AVL树的旋转 </strong></h3>
+<p>LL失去平衡的情况，可以通过一次旋转恢复AVL树的平衡。如图所示</p>
+<p><img alt="图五" src="/images/avl_tree/ll_rotation.jpg"/></p>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">left_left_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">left_child</span><span class="p">;</span>
+
+    <span class="n">left_child</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">left_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">left_child</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>RR失去平衡的情况，可以通过一次旋转恢复AVL树的平衡。如图所示</p>
+<p><img alt="图六" src="/images/avl_tree/rr_rotation.jpg"/></p>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">right_right_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">right_child</span><span class="p">;</span>
+
+    <span class="n">right_child</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">right_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">right_child</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>LR失去平衡的情况，需要两次旋转才能让AVL树恢复平衡。如下图所示</p>
+<p><img alt="图七" src="/images/avl_tree/lr_rotation.jpg"/></p>
+<p>第一次旋转是围绕k1进行的RR旋转，第二次是围绕k3进行的LL旋转</p>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">left_right_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>RL失去平衡的情况，一样需要两次旋转才能让AVL树恢复平衡。如下图所示</p>
+<p><img alt="图八" src="/images/avl_tree/rl_rotation.jpg"/></p>
+<p>第一次旋转是围绕k3进行的LL旋转，第二次是围绕k1进行的RR旋转</p>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">right_left_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="avl_2"><strong> AVL树的插入 </strong></h3>
+<div class="highlight"><pre><span></span><span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_insert</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">avl_tree_new</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Error: create tree node failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">avl_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">avl_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Failed. Don't allow insert the same value."</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="avl_3"><strong> AVL树的删除 </strong></h3>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">avl_node_delete</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">avl_tree_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">temp</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">avl_tree_most_right</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+                <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+                <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">avl_tree_most_left</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+                <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="nl">right</span><span class="p">:</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="n">free</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_delete</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">node</span> <span class="o">=</span> <span class="n">avl_tree_find</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_1"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* avl_tree.h */</span>
+<span class="cp">#ifndef AVL_TREE_H</span>
+<span class="cp">#define AVL_TREE_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">avl_tree_s</span><span class="o">*</span> <span class="n">avl_tree_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">avl_tree_s</span> <span class="p">{</span>
+    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">height</span><span class="p">;</span>
+    <span class="n">avl_tree_pt</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">avl_tree_pt</span> <span class="n">right</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">avl_tree_t</span><span class="p">;</span>
+
+<span class="n">avl_tree_pt</span> <span class="nf">avl_tree_find</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">avl_tree_pt</span> <span class="nf">avl_tree_insert</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">avl_tree_pt</span> <span class="nf">avl_tree_delete</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">avl_tree_destroy</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">avl_tree_print</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">avl_tree_export_dot</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>avl_tree.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/* avl_tree.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  avl_tree.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  平衡二叉树实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-10-08 20:35</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"avl_tree.h"</span><span class="cp"></span>
+
+
+<span class="cm">/* </span>
+<span class="cm"> * 从小到大 ((a) &lt; (b))</span>
+<span class="cm"> * 从大到小 ({a} &gt; (b))</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) &lt; (b)) </span><span class="cm">/* 从小到大 */</span><span class="cp"></span>
+
+<span class="cp">#define HEIGHT(t) ((t) == NULL ? 0 : (t)-&gt;height)</span>
+
+<span class="cp">#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_new</span><span class="p">(</span><span class="n">Item</span> <span class="n">element</span><span class="p">,</span> <span class="n">avl_tree_pt</span> <span class="n">left</span><span class="p">,</span> <span class="n">avl_tree_pt</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="p">(</span><span class="n">avl_tree_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">avl_tree_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">left_left_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">left_child</span><span class="p">;</span>
+
+    <span class="n">left_child</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">left_child</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">left_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">left_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">left_child</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">right_right_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">right_child</span><span class="p">;</span>
+
+    <span class="n">right_child</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">right_child</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">right_child</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">right_child</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">right_child</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">left_right_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">right_left_rotation</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_insert</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">avl_tree_new</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Error: create tree node failed.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">avl_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">avl_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Failed. Don't allow insert the same value."</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">),</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_find</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">avl_tree_find</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">avl_tree_find</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_most_left</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_most_right</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="n">avl_tree_pt</span> 
+<span class="nf">avl_node_delete</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">avl_tree_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">temp</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">left_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_left_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">tree</span> <span class="o">=</span> <span class="n">right_right_rotation</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">HEIGHT</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">avl_tree_most_right</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+                <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+                <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">avl_tree_most_left</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+                <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">?</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="nl">right</span><span class="p">:</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="n">free</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="n">avl_tree_pt</span> 
+<span class="nf">avl_tree_delete</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">node</span> <span class="o">=</span> <span class="n">avl_tree_find</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">avl_node_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">avl_tree_destroy</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">avl_tree_destroy</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">avl_tree_destroy</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">avl_tree_printnode</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">avl_tree_show</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">avl_tree_printnode</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">avl_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">avl_tree_printnode</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+    <span class="n">avl_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">avl_tree_print</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">avl_tree_show</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=%d, xlabel=%d];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="cm">/* 打印边 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s[style=invis];</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">avl_tree_export_dot</span><span class="p">(</span><span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=circle];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>avl_tree.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* avl_tree_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"avl_tree.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span><span class="o">=</span><span class="n">LENGTH</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">avl_tree_pt</span> <span class="n">tree</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== AVL树中依次添加: "</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">avl_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">avl_tree_print</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+
+    <span class="n">avl_tree_export_dot</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s">"avl.dot"</span><span class="p">,</span> <span class="s">"avl树"</span><span class="p">);</span>
+
+    <span class="n">avl_tree_destroy</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>avl_tree_test.c</p>
+<h3 id="_2"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> AVL树中依次添加: <span class="m">3</span> <span class="m">2</span> <span class="m">1</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">16</span> <span class="m">15</span> <span class="m">14</span> <span class="m">13</span> <span class="m">12</span> <span class="m">11</span> <span class="m">10</span> <span class="m">8</span> <span class="m">9</span>                 *
+            1
+                *
+        2
+                *
+            3
+                *
+    4
+                *
+            5
+                *
+        6
+            *
+7
+                    *
+                8
+                    *
+            9
+                    *
+                10
+                    *
+        11
+                *
+            12
+                *
+    13
+                *
+            14
+                *
+        15
+                *
+            16
+                *
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图一" src="/images/avl_tree/avl.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-10(星期一) 20:55  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

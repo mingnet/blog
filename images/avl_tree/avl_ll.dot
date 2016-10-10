@@ -1,0 +1,25 @@
+digraph g{
+node[shape=circle];
+label="LL姿态的树"
+labeljust=l;
+labelloc=t;
+n0[label=8];
+n1[label=4];
+n0->n1;
+n2[label=2];
+n1->n2;
+n3[style=invis];
+n1->n3[style=invis];
+n4[label=6];
+n1->n4;
+n101[label=1];
+n2->n101;
+n102[style=invis];
+n103[style=invis];
+n2->n102[style=invis];
+n2->n103[style=invis];
+n5[style=invis];
+n0->n5[style=invis];
+n6[label=12];
+n0->n6;
+}
