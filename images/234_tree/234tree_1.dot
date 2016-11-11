@@ -1,0 +1,16 @@
+digraph g{
+//node[shape=circle];
+label="2节点";
+labeljust=l;
+labelloc=t;
+
+n1[label="d"];
+n2[label="", style=invis];
+n3[label="", style=invis];
+n4[label="", style=invis];
+
+n1->n2;
+n1->n3[style=invis];
+n1->n4;
+
+}

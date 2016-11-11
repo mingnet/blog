@@ -1,0 +1,65 @@
+digraph g{
+label="删除情况2";
+labeljust=l;
+labelloc=t;
+
+subgraph cluster_1{
+label="";
+node[shape=record];
+penwidth=0;
+n1_0[style=invis];
+n1_1[label="<f1> | A | <f2> | B | <f3>"];
+n1_0->n1_1;
+}
+
+subgraph cluster_2{
+label="";
+node[shape=record];
+penwidth=0;
+n2_0[style=invis];
+n2_1[label="<f1> | B | <f2>"];
+n2_0->n2_1;
+}
+
+
+subgraph cluster_t{
+label="";
+node[shape=circle];
+penwidth=0;
+t_0[style=invis];
+t_1[style=invis];
+t_2[style=invis];
+t_0->t_1[style=invis];
+t_0->t_2[style=invis];
+t_1->t_2[label="对应红黑树", constraint=false, minlen=3];
+//t_0[style=invis];
+//t_1[label="", shape=triangle, orientation=-90, style=filled, color=green, height=0.4];
+//t_0->t_1[style=invis];
+}
+
+
+subgraph cluster_3{
+label="";
+node[shape=circle];
+penwidth=0;
+n3_99[style=invis];
+n3_0[label=B];
+v3_1[label=A, style=filled, color=gray];
+v3_2[style=invis];
+n3_1[style=invis];
+n3_99->n3_0;
+n3_0->v3_1[color="red"];
+n3_0->v3_2[style=invis];
+n3_0->n3_1[style=invis];
+}
+
+subgraph cluster_4{
+label="";
+node[shape=circle];
+penwidth=0;
+n4_99[style=invis];
+n4_0[label=B];
+n4_99->n4_0;
+}
+
+}

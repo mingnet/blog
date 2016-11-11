@@ -117,6 +117,44 @@
 
 
 <article>
+	<h3><a href="/rb-tree-algorithm-in-c.html">红黑树的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-11-10(星期四) 21:14  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<h3 id="_1"><strong> 前言 </strong></h3>
+<p>红黑树是比较复杂的一种平衡树结构。容易看得云里雾里，让人望而却步。或是强记下来，终究不能理解而很快忘记了。</p>
+<p>感觉开始最让人困惑的就是平白无故就得出了一堆性质，然后根据性质很不明所以地推导各种奇怪的操作步骤。这样几乎不可能理解其中的含义。</p>
+<p>这是一个充斥着迷茫和痛苦的过程，我花了20多天的所有空余时间，画了二十几页的草稿。</p>
+<p>红黑树来源于2-3-4树，是2-3-4树的一种表现形式。当节点为红色时，即表示此节点和父节点连结为2-3-4树中的一个节点，如下图。</p>
+<p><img alt="图一" src="/images/rb_tree/234_rb_tree.png"/></p>
+<p>在我的学习中，分析过程大约是：先理解2-3-4树的增加删除 ...</p>
+		<p class="continue"><a href="/rb-tree-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
+	<h3><a href="/234-tree-algorithm-analysis.html">2-3-4树的分析</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-25(星期二) 08:49  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>2-3-4树在大部分资料中都简单带过，也很少会去实现。但是对于理解红黑树和B树来说，2-3-4树有非常重要的作用。</p>
+<p>我被红黑树的算法折磨了几天，终于转到2-3-4树的学习，才搞明白了红黑树的来由。虽然一般2-3-4树不必实现，但是了解其原理还是很重要的。</p>
+<p>2-3-4树是阶为4的B树，同时2-3-4树与红黑树等效。</p>
+<p>2-3-4树的名称意味着树的每个节点带着2，3或4个孩子节点。</p>
+<ul>
+<li>
+<p>2节点有1个数据元素，有2个子节点</p>
+</li>
+<li>
+<p>3节点有2个数据元素，有3个子节点</p>
+</li>
+<li>
+<p>4节点有3个数据元素，有4个子节点</p>
+</li>
+</ul>
+<p><img alt="图" src="/images/234_tree/234tree.png"/></p>
+<p>2-3-4树的特性 ...</p>
+		<p class="continue"><a href="/234-tree-algorithm-analysis.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
 	<h3><a href="/avl-tree-algorithm-in-c.html">AVL树的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-10(星期一) 20:55  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
@@ -213,18 +251,19 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
 		<p class="continue"><a href="/d-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
-<article>
-	<h3><a href="/binary-heap-algorithm-in-c.html">二叉堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-07-04(星期一) 23:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>堆是一颗完全树，同时满足每个节点均大于或小于它的子节点，这样的数据结构被称为最大堆或者最小堆。
-这种结构处于一种半排序状态，它的存取效率从整体上讲介于有序和无序之间。当对象处于动态时，是种非常有优势的数据结构。存取的时间复杂为log(a,n),其中a为完全树的度。</p>
-<p>通常二叉堆以数组存储，层为 log(2,n)，可以使用以下的代码来定义二叉堆结构。</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s ...</span></pre></div>
-		<p class="continue"><a href="/binary-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
 
+<div class="row" style="margin-bottom: -1.25em;">
+	<div class="small-12 columns text-center">
+		<div class="pagination-centered">
+			<ul class="pagination">
+				<li class="arrow unavailable"><a href="#">&larr; Previous</a></li>
+				<li class="current"><a href="/category/suan-fa.html">1</a></li>
+				<li class=""><a href="/category/suan-fa2.html">2</a></li>
+				<li class="arrow"><a href="/category/suan-fa2.html">Next &rarr;</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
 
         </div>
         <!-- End Main Content -->
@@ -233,7 +272,7 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">9</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">11</span></a></li>
                 </ul>
             </div>
 

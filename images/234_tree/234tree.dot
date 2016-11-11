@@ -1,0 +1,49 @@
+digraph g{
+//node[shape=circle];
+//label="3节点";
+labeljust=l;
+labelloc=t;
+
+
+subgraph cluster_1 {
+    penwidth=0;
+    label="2节点";
+    n1[label="d"];
+    n2[label="", style=invis];
+    n3[label="", style=invis];
+    n4[label="", style=invis];
+
+    n1->n2;
+    n1->n3[style=invis];
+    n1->n4;
+}
+
+subgraph cluster_2 {
+    penwidth=0;
+    label="3节点";
+    m1[label="d, f"];
+    m2[label="", style=invis];
+    m3[label="", style=invis];
+    m4[label="", style=invis];
+    m1->m2;
+    m1->m3;
+    m1->m4;
+}
+
+subgraph cluster_3 {
+    penwidth=0;
+    label="4节点";
+    k1[label="d, f, h"];
+    k2[label="", style=invis];
+    k3[label="", style=invis];
+    k4[label="", style=invis];
+    k5[label="", style=invis];
+
+    k1->k2;
+    k1->k3;
+    k1->k4;
+    k1->k5;
+}
+
+
+}

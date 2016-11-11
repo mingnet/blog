@@ -1,0 +1,91 @@
+digraph g{
+label="插入状态3";
+labeljust=l;
+labelloc=t;
+
+subgraph cluster_1{
+label="";
+node[shape=record];
+penwidth=0;
+n1_0[style=invis];
+n1_1[label="<f1> | A | <f2> | B | <f3> | C | <f4>"];
+n1_0->n1_1;
+}
+
+subgraph cluster_2{
+label="";
+node[shape=record];
+penwidth=0;
+n2_0[label="<f0> | ~ | <f1> | B | <f2>"];
+n2_1[label="<f1> | A | <f2>"];
+n2_2[label="<f1> | C | <f2> | D | <f3>"];
+n2_0->n2_1;
+n2_0->n2_2;
+}
+
+
+subgraph cluster_t{
+label="";
+node[shape=circle];
+penwidth=0;
+t_0[style=invis];
+t_1[style=invis];
+t_2[style=invis];
+t_0->t_1[style=invis];
+t_0->t_2[style=invis];
+t_1->t_2[label="对应红黑树", constraint=false, minlen=3];
+//t_0[style=invis];
+//t_1[label="", shape=triangle, orientation=-90, style=filled, color=green, height=0.4];
+//t_0->t_1[style=invis];
+}
+
+
+subgraph cluster_3{
+label="";
+node[shape=circle];
+penwidth=0;
+n3_99[style=invis]
+n3_0[label=B];
+n3_1[label=A];
+v3_1[style=invis];
+n3_2[label=C];
+n3_99->n3_0;
+n3_0->n3_1[color="red"];
+n3_0->v3_1[style=invis];
+n3_0->n3_2[color="red"];
+}
+
+subgraph cluster_4{
+label="";
+node[shape=circle];
+penwidth=0;
+n4_99[style=invis];
+n4_0[label=B];
+n4_1[label=A];
+v4_1[style=invis];
+n4_2[label=C];
+
+v4_2[style=invis];
+v4_3[style=invis];
+v4_4[style=invis];
+
+v4_5[style=invis];
+v4_6[style=invis];
+n4_3[label=D, style=filled, color=green];
+
+n4_99->n4_0[color="red"];
+n4_0->n4_1;
+n4_0->v4_1[style=invis];
+n4_0->n4_2;
+
+n4_1->v4_2[style=invis];
+n4_1->v4_3[style=invis];
+n4_1->v4_4[style=invis];
+
+n4_2->v4_5[style=invis];
+n4_2->v4_6[style=invis];
+n4_2->n4_3[color="red"];
+
+}
+
+}

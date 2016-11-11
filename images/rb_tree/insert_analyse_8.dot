@@ -1,0 +1,65 @@
+digraph g{
+node[shape=circle];
+label="插入状态8";
+labeljust=l;
+labelloc=t;
+
+subgraph cluster_1{
+label="";
+penwidth=0;
+n1_0[label=n0];
+n1_1[label=n1];
+v1_1[style=invis];
+n1_2[label=n2];
+v1_2[label=v0, style=invis];
+v1_3[label=v0, style=invis];
+n1_3[label=n3];
+v1_4[label=v0, style=invis];
+v1_5[label=v0, style=invis];
+v1_6[label=v0, style=invis];
+
+n1_0->n1_1[color="red"];
+n1_0->v1_1[style=invis];
+n1_0->n1_2[color="red"];
+
+n1_1->v1_2[style=invis];
+n1_1->v1_3[style=invis];
+n1_1->n1_3[color="red"];
+
+n1_2->v1_4[style=invis];
+n1_2->v1_5[style=invis];
+n1_2->v1_6[style=invis];
+}
+
+
+subgraph cluster_2{
+label="修改色";
+penwidth=0;
+p0[shape=point];
+n2_0[label=n0];
+n2_1[label=n1];
+v2_1[style=invis];
+n2_2[label=n2];
+v2_2[label=v0, style=invis];
+v2_3[label=v0, style=invis];
+n2_3[label=n3];
+v2_4[label=v0, style=invis];
+v2_5[label=v0, style=invis];
+v2_6[label=v0, style=invis];
+
+p0->n2_0[color="red"];
+n2_0->n2_1;
+n2_0->v2_1[style=invis];
+n2_0->n2_2;
+
+n2_1->v2_2[style=invis];
+n2_1->v2_3[style=invis];
+n2_1->n2_3[color="red"];
+
+n2_2->v2_4[style=invis];
+n2_2->v2_5[style=invis];
+n2_2->v2_6[style=invis];
+}
+
+
+}

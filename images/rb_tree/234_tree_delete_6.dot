@@ -1,0 +1,26 @@
+digraph g{
+node[shape=record];
+//mindist=5.0;
+nodesep=1;
+edge[minlen=1.8];
+splines="line";
+label="图6";
+labeljust=l;
+labelloc=t;
+
+n1[label="<f1> | 20 | <f2>"];
+n2[label="<f1> | 14 | <f2>"];
+n3[label="<f1> | 24 | <f2> "];
+n4[label="<f1> | 5 | <f2> | 10 | <f3>"];
+n5[label="<f1> | 17 | <f2>"];
+n6[label="<f1> | 22 | <f2>"];
+n7[label="", shape=circle];
+
+n1:f1->n2[tailport=sw];
+n1:f2->n3[tailport=se];
+n2:f1->n4[tailport=sw];
+n2:f2->n5[tailport=se];
+n3:f1->n6[tailport=sw];
+n3:f2->n7[tailport=se];
+
+}

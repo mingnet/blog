@@ -1,0 +1,272 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>2-3-4树的分析</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">插入操作</a></li>
+<li><a href="#_2">删除操作</a></li>
+<li><a href="#_3">删除与插入操作的另外一种方法</a></li>
+</ul>
+</div>
+	
+<p>2-3-4树在大部分资料中都简单带过，也很少会去实现。但是对于理解红黑树和B树来说，2-3-4树有非常重要的作用。</p>
+<p>我被红黑树的算法折磨了几天，终于转到2-3-4树的学习，才搞明白了红黑树的来由。虽然一般2-3-4树不必实现，但是了解其原理还是很重要的。</p>
+<p>2-3-4树是阶为4的B树，同时2-3-4树与红黑树等效。</p>
+<p>2-3-4树的名称意味着树的每个节点带着2，3或4个孩子节点。</p>
+<ul>
+<li>
+<p>2节点有1个数据元素，有2个子节点</p>
+</li>
+<li>
+<p>3节点有2个数据元素，有3个子节点</p>
+</li>
+<li>
+<p>4节点有3个数据元素，有4个子节点</p>
+</li>
+</ul>
+<p><img alt="图" src="/images/234_tree/234tree.png"/></p>
+<p>2-3-4树的特性</p>
+<ol>
+<li>
+<p>每个节点（叶节点或内部节点）是2节点，3节点或4节点。</p>
+</li>
+<li>
+<p>所有叶子节点的深度相同。</p>
+</li>
+<li>
+<p>数据始终保持排序顺序</p>
+</li>
+</ol>
+<h3 id="_1"><strong> 插入操作 </strong></h3>
+<p>插入节点时，从2-3-4树的根节点开始执行以下操作</p>
+<ol>
+<li>
+<p>如果当前节点是4度节点:</p>
+<ul>
+<li>如果当前节点是根节点，则中间的值被设置为新的根节点，该根节点是2度节点，树的高度增加1</li>
+<li>否则，将中间值加入父节点中</li>
+<li>将当前节点左右两边的值分裂成2个2度节点</li>
+</ul>
+</li>
+<li>
+<p>查找子节点可以包含被插入值的区间</p>
+</li>
+<li>
+<p>如果找到一个节点是叶子节点，则将被插入值放入该节点中，插入操作结束</p>
+<ul>
+<li>否则，继续查找 子节点，或回到步骤1</li>
+</ul>
+</li>
+</ol>
+<p>例如，现在要将25插入到如下的2-3-4树中</p>
+<p><img alt="图一" src="/images/234_tree/insert_1.png"/></p>
+<p>从根节点开始查找，直到找到节点(22,24,29)</p>
+<p><img alt="图二" src="/images/234_tree/insert_2.png"/></p>
+<p>节点(22,24,29)是一个4度节点，所以将中间值加入父节点中，剩下的左右两个值(22,29)分裂成成2个2度节点</p>
+<p><img alt="图三" src="/images/234_tree/insert_3.png"/></p>
+<p>再次查找到节点29，该节点没有左孩子，将25直接插入到该节点中</p>
+<h3 id="_2"><strong> 删除操作 </strong></h3>
+<p>从2-3-4树删除节点时，执行以下操作</p>
+<ol>
+<li>
+<p>查找需要被删除的元素</p>
+<ul>
+<li>如果元素不在叶节点，记住它的位置并从左子树(右子树)继续向下查找，直到叶节点。该叶节点应该是左子树最右边的值(右子树最左边的值)</li>
+<li>交换需要删除的值和第二次查找到的值</li>
+<li>最简单的是从上到下对树进行调整，使得找到的叶节点不是2度节点，这样交换之后就不是2度节点，可以直接删除</li>
+<li>如果叶节点的元素是2度节点，则需要执行后面的操作</li>
+</ul>
+</li>
+<li>
+<p>如果兄弟节点是3度节点或是4度节点，执行以下旋转操作</p>
+<ul>
+<li>从兄弟节点移除一个节点替换父点节的值</li>
+<li>把替换出来父节点的值合并入当前节点变成一个3度节点</li>
+</ul>
+</li>
+<li>
+<p>如果父节点是2度节点且兄弟节点也是2度节点，合并三个节点变成一个新的4度节点。如果该节点是根节点，高度减1。</p>
+</li>
+<li>
+<p>如果父节点是3度节点或是4度节点，且兄弟节点是2度节点，做以下的操作</p>
+<ul>
+<li>合并当前节点和兄弟节点及父节点的一个值，使当前节点变成一个4度节点</li>
+</ul>
+</li>
+<li>
+<p>现在，当前节点有多个值，移除需要删除的值即可</p>
+</li>
+</ol>
+<p>删除<strong>N</strong>从树中，<strong>N</strong>是叶子节点，且是节点中唯一的值</p>
+<p><img alt="图一" src="/images/234_tree/Trees-234-delete-4.png"/></p>
+<p>它的兄弟节点有至少两个值，所以移动兄弟节点的值<strong>F</strong>到父节点，移动父节点的值<strong>H</strong>到当前节点</p>
+<p><img alt="图二" src="/images/234_tree/Trees-234-delete-5.png"/></p>
+<p>现在有两个节点在当前叶子节点中，删除当前节点的<strong>N</strong>值</p>
+<p><img alt="图三" src="/images/234_tree/Trees-234-delete-6.png"/></p>
+<p>删除<strong>H</strong>从树中，<strong>H</strong>是个叶子节点，且是节点中唯一的值，且没有两个节点的兄弟节点</p>
+<p><img alt="图四" src="/images/234_tree/Trees-234-delete-7.png"/></p>
+<p>它的父节点有两个值，所以合并兄弟节点和父节点的一个值，当前节点带有3个值变成4节点</p>
+<p><img alt="图五" src="/images/234_tree/Trees-234-delete-8.png"/></p>
+<p>现在可以简单地删除<strong>H</strong>从当前叶子节点中</p>
+<p><img alt="图六" src="/images/234_tree/Trees-234-delete-9.png"/></p>
+<p>此时再次删除<strong>R</strong>，遍历树的时候，我们能够发现，根节点(<strong>P</strong>)和它的两个子节点(<strong>C</strong>和<strong>V</strong>)都只有一个值，这时合并这三个节点</p>
+<p><img alt="图七" src="/images/234_tree/Trees-234-delete-10.png"/></p>
+<p>合并后如下图所示</p>
+<p><img alt="图八" src="/images/234_tree/Trees-234-delete-11.png"/></p>
+<p>此时遍历到带有<strong>R</strong>的节点，可以发现其是叶子节点，该节点有两个值</p>
+<p><img alt="图九" src="/images/234_tree/Trees-234-delete-12.png"/></p>
+<p>简单地删除值<strong>R</strong>从当前节点中</p>
+<p><img alt="图十" src="/images/234_tree/Trees-234-delete-13.png"/></p>
+<h3 id="_3"><strong> 删除与插入操作的另外一种方法 </strong></h3>
+<p>上面的插入与删除操作的方法来自wikipedia和其它互联网资料。几乎所有的资料都这样介绍2-3-4树的操作流程。</p>
+<p>但是却还有另外的操作流程来完成2-3-4树的删除与插入。区别是：插入元素的时候，遍历过程不分裂4度节点，而是插入元素到叶子节点后，向上循环修正；删除元素的时候，遍历过程中不合并节点，删除元素后再向上循环修正。这种做法才是与现的红黑树和B树的操作流程相符合的。</p>
+<p>我们根据这个来总结红黑树和B树的一般操作方法(在2-3-4树中)</p>
+<ol>
+<li>
+<p>插入时。先查找到叶子位置的插入节点，插入元素。循环修正：如果插入后节点元素数量大于3，分裂节点，把中间节点插入父节点，循环检查和分裂直到父节点元素数量不大于3。</p>
+</li>
+<li>
+<p>删除时。先查找到需要删除的节点，如果该节点是内部节点，则交换到左子树的最右叶子节点或右子树最左叶子节点，删除它。循环修正：如果删除后元素数量为0，可以从兄弟节点旋转一个元素过来，如果兄弟节点只有一个，取出一个父节点和兄弟节点合并为一个新节点。循环检查父节点和合并直到父节点元素数量大于0。</p>
+</li>
+</ol>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-25(星期二) 08:49  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>

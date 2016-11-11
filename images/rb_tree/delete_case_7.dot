@@ -1,0 +1,138 @@
+digraph g{
+label="删除情况7";
+labeljust=l;
+labelloc=t;
+splines=line;
+
+subgraph cluster_1{
+label="";
+node[shape=record];
+penwidth=0;
+n1_0[label="<f1> | B | <f2> | D | <f3>"];
+n1_1[label="<f1> | A | <f2>"];
+n1_2[label="<f1> | C | <f2>"];
+n1_3[label="<f1> | E | <f2>"];
+n1_0:f1->n1_1;
+n1_0:f2->n1_2;
+n1_0:f3->n1_3;
+}
+
+subgraph cluster_2{
+label="";
+node[shape=record];
+penwidth=0;
+n2_0[label="<f1> | D | <f2>"];
+n2_1[label="<f1> | B | <f2> | C | <f3>"];
+n2_2[label="<f1> | E | <f2>"];
+n2_0:f1->n2_1;
+n2_0:f2->n2_2;
+}
+
+
+subgraph cluster_t{
+label="";
+node[shape=circle];
+penwidth=0;
+t_0[style=invis];
+t_1[style=invis];
+t_2[style=invis];
+t_0->t_1[style=invis];
+t_0->t_2[style=invis];
+t_1->t_2[label="对应红黑树", constraint=false, minlen=3];
+//t_0[style=invis];
+//t_1[label="", shape=triangle, orientation=-90, style=filled, color=green, height=0.4];
+//t_0->t_1[style=invis];
+}
+
+
+subgraph cluster_3{
+label="";
+node[shape=circle];
+penwidth=0;
+n3_0[label=B];
+n3_1[label=A, style=filled, color=gray, style=filled, color=gray];
+v3_1[style=invis];
+n3_2[label=D];
+n3_3[style=invis];
+v3_2[style=invis];
+n3_4[style=invis];
+
+n3_5[label=C];
+v3_3[style=invis];
+n3_6[label=E];
+
+n3_0->n3_1;
+n3_0->v3_1[style=invis];
+n3_0->n3_2[color=red];
+
+n3_1->n3_3[style=invis];
+n3_1->v3_2[style=invis];
+n3_1->n3_4[style=invis];
+
+n3_2->n3_5[];
+n3_2->v3_3[style=invis];
+n3_2->n3_6;
+}
+
+subgraph cluster_4{
+label="";
+node[shape=circle];
+penwidth=0;
+n4_0[label=D];
+n4_1[label=B];
+v4_1[style=invis];
+n4_2[label=F];
+
+n4_3[label=A, style=filled, color=gray, style=filled, color=gray];
+v4_2[style=invis];
+n4_4[label=C];
+
+n4_5[style=invis];
+//v4_3[style=invis];
+//n4_6[style=invis];
+
+n4_0->n4_1[color=red];
+n4_0->v4_1[style=invis];
+n4_0->n4_2;
+
+n4_1->n4_3;
+n4_1->v4_2[style=invis];
+n4_1->n4_4;
+
+n4_2->n4_5[style=invis];
+//n4_2->v4_3[style=invis];
+//n4_2->n4_6[style=invis];
+
+}
+
+subgraph cluster_5{
+label="";
+node[shape=circle];
+penwidth=0;
+n5_0[label=D];
+n5_1[label=B];
+v5_1[style=invis];
+n5_2[label=F];
+n5_3[style=invis];
+v5_2[style=invis];
+n5_4[label=C];
+
+n5_5[label="", style=invis];
+v5_3[label="", style=invis];
+n5_6[label="", style=invis];
+
+n5_0->n5_1;
+n5_0->v5_1[style=invis];
+n5_0->n5_2;
+
+n5_1->n5_3[style=invis];
+n5_1->v5_2[style=invis];
+n5_1->n5_4[color=red];
+
+n5_2->n5_5[style=invis];
+n5_2->v5_3[style=invis];
+n5_2->n5_6[style=invis];
+
+}
+
+}

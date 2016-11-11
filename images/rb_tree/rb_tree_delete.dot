@@ -1,0 +1,75 @@
+digraph g{
+//label="删除状态3";
+labeljust=l;
+labelloc=t;
+
+subgraph cluster_4{
+label="交换相邻节点(Z,Y)";
+node[shape=circle];
+penwidth=0;
+n4_0[label=Z];
+n4_1[label="", shape=box];
+v4_1[style=invis];
+n4_2[label=Y];
+v4_2[style=invis];
+v4_3[style=invis];
+v4_4[style=invis];
+
+v4_5[style=invis];
+v4_6[style=invis];
+n4_3[label=X];
+
+n4_0->n4_1;
+n4_0->v4_1[style=invis];
+n4_0->n4_2;
+
+n4_1->v4_2[style=invis];
+n4_1->v4_3[style=invis];
+n4_1->v4_4[style=invis];
+
+n4_2->v4_5[style=invis];
+n4_2->v4_6[style=invis];
+n4_2->n4_3[color="red"];
+}
+
+subgraph cluster_3{
+label="交换不相邻节点(Z,Y)";
+node[shape=circle];
+penwidth=0;
+n3_0[label=Z];
+n3_1[label="", shape=box];
+v3_1[style=invis];
+n3_2[label=""];
+
+v3_2[style=invis];
+v3_3[style=invis];
+v3_4[style=invis];
+
+n3_3[label=Y];
+v3_5[style=invis];
+n3_4[label="", shape=box];
+
+v3_6[style=invis];
+v3_7[style=invis];
+n3_5[label=X];
+
+n3_0->n3_1;
+n3_0->v3_1[style=invis];
+n3_0->n3_2;
+
+n3_1->v3_2[style=invis];
+n3_1->v3_3[style=invis];
+n3_1->v3_4[style=invis];
+
+n3_2->n3_3;
+n3_2->v3_5[style=invis];
+n3_2->n3_4;
+
+n3_3->v3_6[style=invis];
+n3_3->v3_7[style=invis];
+n3_3->n3_5[color="red"];
+
+}
+
+
+}
