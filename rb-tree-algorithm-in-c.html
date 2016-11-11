@@ -649,30 +649,6 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p>我想搞明白，从2-3-4树怎么对应到红黑树的增加删除流程，整个过程是迷茫和痛苦的。</p>
-<p>将额外的黑色节点向上移动，直到遇到一个红色节点，然后设置成红色的，但是注意要把兄弟的黑色节点减少1。可以看作每次移动都是将额外的黑色节点移动到父节点所做的操作。</p>
-<p>有一个黑色删除了，所以找办法让父级树加一个黑色。</p>
-<p>5个性质的推导过程是将兄弟节点设法变成黑色，并且其两个孩子也是黑色</p>
-<p>红节点的含义是指向父节点的连接是红色的，如果红节点的子节点还是红色，即无法组成3节点或是4节点
-2-3-4树的所有叶子节点的高度相同</p>
-<p>开发平衡树算法的一种可选方法是完全忽略2-3-4树的抽象</p>
-<p>2-3-4树的特性：
-1、每个节点（叶节点或内部节点）是2节点，3节点或4节点。
-2、所有叶子节点的深度相同。
-3、数据始终保持排序顺序</p>
-<p>2-3-4树转化为红黑树规则: 
-    1、把每个2-节点转化为红黑树的黑色节点. 
-    2、把每个3-节点转化成一个子节点和一个父节点，子节点有两个自己的子节点，父节点 有另一个子节点，子节点涂成红色，父节点涂成黑色. 
-    3、把每个4-节点转化成一个父节点,两个子节点和四个孙子节点,子节点涂成红色,父节点涂成黑色. </p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">rb_tree_s</span><span class="o">*</span> <span class="n">rb_tree_pt</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">rb_tree_s</span> <span class="p">{</span>
-    <span class="n">Item</span> <span class="n">data</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">height</span><span class="p">;</span>
-    <span class="n">rb_tree_pt</span> <span class="n">left</span><span class="p">;</span>
-    <span class="n">rb_tree_pt</span> <span class="n">right</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">rb_tree_t</span><span class="p">;</span>
-</pre></div>
 <h3 id="_11"><strong> 完整源码 </strong></h3>
 <div class="highlight"><pre><span></span><span class="cm">/* rb_tree.h */</span>
 <span class="cp">#ifndef RB_TREE_H</span>
