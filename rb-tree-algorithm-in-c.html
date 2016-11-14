@@ -109,7 +109,7 @@
   <li><a href="/category/suan-fa.html">算法</a></li>
 </ul>
 <article>
-	<h2>红黑树的C语言实现</h2>
+	<h2>红黑树的分析与C语言实现</h2>
         <div class="toc">
 <ul>
 <li><a href="#_1">前言</a></li>
@@ -120,7 +120,7 @@
 <li><a href="#2-3-4_3">2-3-4树的删除与红黑树的对应关系</a></li>
 <li><a href="#_3">红黑树的删除步骤的推导</a></li>
 <li><a href="#_4">红黑树的性质</a></li>
-<li><a href="#_5">以红黑树性质分析插入删除步骤的关键问题</a></li>
+<li><a href="#_5">红黑树性质分析的关键问题</a></li>
 <li><a href="#_6">红黑树的旋转</a></li>
 <li><a href="#_7">通过红黑树性质分析插入步骤</a></li>
 <li><a href="#_8">红黑树插入实现</a></li>
@@ -267,18 +267,18 @@
 <p>性质5，由于2-3-4树是个平衡树，所以叶子的高度都相同，而2-3-4树中叶子的到根的路径与红黑树黑节点的路径是一致的。</p>
 </li>
 </ol>
-<h3 id="_5"><strong> 以红黑树性质分析插入删除步骤的关键问题 </strong></h3>
+<h3 id="_5"><strong> 红黑树性质分析的关键问题 </strong></h3>
 <p>插入的每次情况分析主要看叔叔，删除的每次情况只看兄弟</p>
 <p>插入的核心思路是：将红色的节点移到根节点，然后，将根节点设为黑色</p>
 <p>删除的核心思路是：将额外的黑色节点向上移动，直到遇到一个红色节点，就把这个红色节点设置为黑色的。但是过程中注意要把兄弟的黑色节点减少1。可以看作每次移动都是将额外的黑色节点移动到父节点所做的操作。</p>
 <p>删除操作有几种情况相互转换。操作的一个重要目的是转换成一个更简单的可以处理的情况。</p>
-<p>有如下的转变。</p>
-<p>case3-&gt;case4-&gt;case2-&gt;caseA or caseB</p>
-<p>case1-&gt;case2-&gt;caseA or caseB</p>
+<p>删除操作的情况有如下的转变。</p>
+<p>case3-&gt;case4-&gt;case2-&gt;是红节点或是根</p>
+<p>case1-&gt;case2-&gt;是红节点或是根</p>
 <h3 id="_6"><strong> 红黑树的旋转 </strong></h3>
 <p>我能说。。这个树的旋转都是一样的么。所以我下面就用了上次avl树那篇文章画的图。很简单。</p>
 <p><strong>左旋转</strong></p>
-<p><img alt="图一" src="/images/rb_tree/ll_rotation.jpg"/></p>
+<p><img alt="图一" src="/images/rb_tree/rr_rotation.jpg"/></p>
 <p>实现如下：</p>
 <div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> 
 <span class="nf">rb_left_rotate</span><span class="p">(</span><span class="n">rb_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">rb_node_pt</span> <span class="n">x</span><span class="p">)</span>
@@ -307,7 +307,7 @@
 <span class="p">}</span>
 </pre></div>
 <p><strong>右旋转</strong></p>
-<p><img alt="图二" src="/images/rb_tree/rr_rotation.jpg"/></p>
+<p><img alt="图一" src="/images/rb_tree/ll_rotation.jpg"/></p>
 <p>实现如下：</p>
 <div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> 
 <span class="nf">rb_right_rotate</span><span class="p">(</span><span class="n">rb_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">rb_node_pt</span> <span class="n">y</span><span class="p">)</span>
