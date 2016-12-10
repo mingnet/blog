@@ -1,0 +1,28 @@
+digraph g{
+node[shape=record];
+label="B树生成";
+labeljust=l;
+labelloc=t;
+splines=line;
+n0[label="<f0> | 15 | <f1>"];
+n1[label="<f0> | 3 | <f1> | 7 | <f2> | 11 | <f3>"];
+n0:f0->n1;
+n2[label="0 | 1 | 2"];
+n1:f0->n2;
+n3[label="4 | 5 | 6"];
+n1:f1->n3;
+n4[label="8 | 9 | 10"];
+n1:f2->n4;
+n5[label="12 | 13 | 14"];
+n1:f3->n5;
+n6[label="<f0> | 19 | <f1> | 23 | <f2> | 27 | <f3>"];
+n0:f1->n6;
+n7[label="16 | 17 | 18"];
+n6:f0->n7;
+n8[label="20 | 21 | 22"];
+n6:f1->n8;
+n9[label="24 | 25 | 26"];
+n6:f2->n9;
+n10[label="28 | 29"];
+n6:f3->n10;
+}

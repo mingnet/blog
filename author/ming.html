@@ -108,6 +108,20 @@
         <div class="medium-9 small-12 columns" role="content">
 
 <article>
+	<h3><a href="/b-tree-algorithm-in-c.html">B树的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-12-11(星期日) 02:03  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>B树是2-3-4树的延伸，或者说2-3-4树是B树的一种情况。</p>
+<p>所以B树的基本操作与2-3-4树相同。2-3-4树其实还是挺重要的一种数据结构，理解2-3-4树更理解了B树和红黑树。前两篇文章作2-3-4树分析时画过图，B树便不再画了，画图其实挺累的。</p>
+<p>B树的查询，插入，删除的时间复杂度都是O(lgn)</p>
+<p>B树的定义：</p>
+<ol>
+<li>每个节点最多有m个元素(m + 1个孩子)</li>
+<li>每个非叶节点(除根节点)有最少m/2个元素 ...</li></ol>
+		<p class="continue"><a href="/b-tree-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
 	<h3><a href="/rb-tree-algorithm-in-c.html">红黑树的分析与C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-11-10(星期四) 21:14  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
@@ -231,17 +245,6 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
 		<p class="continue"><a href="/leftist-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
-<article>
-	<h3><a href="/d-heap-algorithm-in-c.html">D堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-23(星期五) 19:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>D堆是二叉堆的简单推广，跟二叉堆的区别是所有的节点都有d个儿子，代码也跟二叉堆的相似。下图表示一个D=3的最小D堆。</p>
-<p><img alt="图" src="/images/d_heap/heap.png"/></p>
-<p>D堆插入操作的时间改进为O(log(d,N)),然面删除操作要花费较大时间，一般需要O(d*log(d,N))。如果D不是2的幂，也不能通过二进制移位来实现乘法和除法，这样也大大增加运行时间。
-大部分时候总是使用二叉堆，但D堆也在一些情况下使用 ...</p>
-		<p class="continue"><a href="/d-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
 
 <div class="row" style="margin-bottom: -1.25em;">
 	<div class="small-12 columns text-center">
@@ -263,7 +266,7 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">11</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">12</span></a></li>
                 </ul>
             </div>
 

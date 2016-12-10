@@ -1,0 +1,1134 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/suan-fa.html">算法</a></li>
+</ul>
+<article>
+	<h2>B树的C语言实现</h2>
+        <div class="toc">
+<ul>
+<li><a href="#b">B树的插入操作</a></li>
+<li><a href="#b_1">B树的删除操作</a></li>
+<li><a href="#_1">完整源码</a></li>
+<li><a href="#_2">测试程序的运行结果</a></li>
+</ul>
+</div>
+	
+<p>B树是2-3-4树的延伸，或者说2-3-4树是B树的一种情况。</p>
+<p>所以B树的基本操作与2-3-4树相同。2-3-4树其实还是挺重要的一种数据结构，理解2-3-4树更理解了B树和红黑树。前两篇文章作2-3-4树分析时画过图，B树便不再画了，画图其实挺累的。</p>
+<p>B树的查询，插入，删除的时间复杂度都是O(lgn)</p>
+<p>B树的定义：</p>
+<ol>
+<li>每个节点最多有m个元素(m + 1个孩子)</li>
+<li>每个非叶节点(除根节点)有最少m/2个元素(m/2 + 1个孩子)</li>
+<li>如果根不时叶节点，则根至少有1个元素(2个孩子)</li>
+<li>有k个元素的非叶节点包含k+1个孩子节点</li>
+<li>所有叶子节点在同一层</li>
+</ol>
+<h3 id="b"><strong> B树的插入操作 </strong></h3>
+<p>B树的插入也有两种方法，一种是从上到下分裂，即遍历过程中，每次遇到等于m的节点时都分裂节点，这样保证插入后不再需要分裂节点。
+另一种是从下到上分裂，查找到节点后插入元素，然后再向上循环分裂保证B树的性质。算法导论采用的是第一种方法，从上到下分裂。</p>
+<p>我这里采用的是第二种方法，从下到上分裂</p>
+<p>插入步骤：</p>
+<ol>
+<li>查找到需要插入的节点，这个节点必然是在叶节点</li>
+<li>插入元素到节点</li>
+<li>检查节点，如果节点不满，插入完成</li>
+<li>如果节点已满，分裂节点</li>
+<li>以m/2处的元素为分割点，分成两个节点</li>
+<li>把分割点元素插入父节点，可能造成父节点再次分裂</li>
+<li>如果父节点是根节点，创建新的父节点</li>
+<li>重新从步骤3开始循环直到完成</li>
+</ol>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span> 
+<span class="nf">_b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Item</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">b_node_pt</span> <span class="n">parent</span><span class="p">,</span> <span class="n">node2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">mid</span><span class="p">;</span>
+
+    <span class="cm">/* 插入叶子节点 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="cm">/* 分裂节点 */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* 叶子节点分裂 */</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">b_node_new_leaf</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="cm">/* 内部节点分裂 */</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">b_node_new_internal</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* 拷贝数据 */</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">mid</span><span class="p">];</span>
+        <span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">+</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">memcpy</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">+</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">b_node_pt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="n">mid</span><span class="p">));</span>
+            <span class="cm">/* 重设父指针 */</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+
+        <span class="cm">/* 插入父节点 */</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* 生成新的树根节点 */</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">b_node_new_internal</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+            <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//增加数据和右子树</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">temp</span><span class="p">.</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="n">node2</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">b_node_new_leaf</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+    <span class="cm">/* 查找到叶节点 */</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+        <span class="cm">/* </span>
+<span class="cm">         * 如果不允许插入相同 </span>
+<span class="cm">         * 检查ret == 1</span>
+<span class="cm">         */</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 如果不允许插入相同 </span>
+<span class="cm">     * 检查ret == 1</span>
+<span class="cm">     */</span>
+    <span class="n">_b_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="b_1"><strong> B树的删除操作 </strong></h3>
+<p>B树的删除也同样有两种方法，一种是从上到下合并，即遍历过程中，每次遇到小于等于m/2的节点时都从兄弟拆借元素或合并节点，这样保证删除后不再需要合并节点。
+另一种是从下到上合并，查找到节点后删除元素，然后再向上循环拆借元素或合并保证B树的性质。算法导论采用的是第一种方法，从上到下合并。</p>
+<p>我这里采用的还是是第二种方法，从下到上合并</p>
+<ol>
+<li>查找到删除元素所在的节点</li>
+<li>如果是内部节点，则与其右子树的最左元素进行交换，交换后删除元素在叶子节点</li>
+<li>检查节点，如果节点大于等于m/2，删除完成</li>
+<li>如果节点小于m/2，查看其兄弟节点的大小</li>
+<li>如果兄弟节点大于m/2，从兄弟节点借一个元素过来，跟二叉树的旋转类似</li>
+<li>如果兄弟节点也小于等于m/2，则当前节点与兄弟节点及对应的父节点中的元素合并</li>
+<li>以父节点为当前节点，从步骤3开始检查循环直到完成</li>
+</ol>
+<p>以下为实现代码</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">parent</span><span class="p">,</span> <span class="n">sibling</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="cm">/* 删除叶节点指定值 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">index</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">--</span><span class="p">;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&lt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* 寻找当前节点在父节点的位置 */</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">index</span><span class="o">&lt;=</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Didn't find node in parent's children array!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* </span>
+<span class="cm">             * 节点是父第0个子节点，兄弟是第1个子节点</span>
+<span class="cm">             * 中间的分隔元素是父中的第0个元素</span>
+<span class="cm">             * </span>
+<span class="cm">             */</span>
+            <span class="n">sibling</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* 从兄弟迁移数据 */</span>
+                <span class="n">_b_node_left_rotate</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="cm">/* 合并兄弟 */</span>
+                <span class="n">_b_node_merge</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="cm">/* </span>
+<span class="cm">             * 节点是父中第index个子节点，兄弟是第index - 1个子节点</span>
+<span class="cm">             * 中间的分隔元素是父中的第index - 1个元素</span>
+<span class="cm">             * </span>
+<span class="cm">             */</span>
+            <span class="n">sibling</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* 从兄弟迁移数据 */</span>
+                <span class="n">_b_node_right_rotate</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="cm">/* 合并兄弟 */</span>
+                <span class="n">_b_node_merge</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">,</span> <span class="n">node2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 查找到删除数据的节点 */</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 在内部节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node2</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">_b_tree_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_1"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* b_tree.h */</span>
+<span class="cp">#ifndef B_TREE_H</span>
+<span class="cp">#define B_TREE_H</span>
+
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">KEY</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">VALUE</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">KEY</span> <span class="n">key</span><span class="p">;</span>
+    <span class="n">VALUE</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Item</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">b_node_s</span><span class="o">*</span> <span class="n">b_node_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">b_node_s</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">keynum</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>       <span class="cm">/* 数据，最大max+1个,最小min个 */</span>
+    <span class="n">b_node_pt</span> <span class="o">*</span><span class="n">child</span><span class="p">;</span> <span class="cm">/* 子节点，最大max+2个，最小min+1个 */</span>
+    <span class="n">b_node_pt</span> <span class="n">parent</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">b_node_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">b_tree_s</span><span class="o">*</span> <span class="n">b_tree_pt</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">b_tree_s</span> <span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">root</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">min</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">b_tree_t</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">b_tree_create</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="o">*</span><span class="n">_tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="n">Item</span> <span class="o">*</span><span class="nf">b_tree_search</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">b_tree_destroy</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">b_tree_print</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">b_tree_export_dot</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">);</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+<p>b_tree.h</p>
+<div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  b_tree.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  B树实现</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2016-12-05 21:43</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"b_tree.h"</span><span class="cp"></span>
+
+<span class="cm">/* </span>
+<span class="cm"> * a==b，返回0, a&gt;b，返回正数，a&lt;b 返回负数</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="cp">#define item_cmp(a, b) ((a) - (b))</span>
+
+
+<span class="k">static</span> <span class="n">b_node_pt</span> <span class="nf">b_node_new_leaf</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">b_node_pt</span> <span class="nf">b_node_new_internal</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">index</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">_b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_b_node_left_rotate</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_b_node_right_rotate</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_b_node_merge</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">_b_node_destory</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">);</span>
+
+<span class="kt">int</span> 
+<span class="nf">b_tree_create</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="o">*</span><span class="n">_tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_tree_pt</span> <span class="n">tree</span> <span class="o">=</span> <span class="p">(</span><span class="n">b_tree_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">b_tree_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="n">m</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">_tree</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  b_node_new_leaf</span>
+<span class="cm"> * Description:  创建新的叶子节点</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="n">b_node_pt</span> 
+<span class="nf">b_node_new_leaf</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="p">(</span><span class="n">b_node_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">b_node_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  b_node_new_internal</span>
+<span class="cm"> * Description:  创建新的内部节点</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="n">b_node_pt</span> 
+<span class="nf">b_node_new_internal</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="p">(</span><span class="n">b_node_pt</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">b_node_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">=</span> <span class="p">(</span><span class="n">b_node_pt</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">b_node_pt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">2</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  binary_search</span>
+<span class="cm"> * Description:  二分查找，找到数组中指定key的位置，如果存在，返回1, 否则返回0</span>
+<span class="cm"> *               如果找到索引为该值位置，否则返回右邻值位置(child的位置)</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">int</span> 
+<span class="nf">binary_search</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">mid</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">mid</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">item_cmp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">mid</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="o">*</span><span class="n">index</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="o">*</span><span class="n">index</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_tree_insert</span>
+<span class="cm"> * Description:  元素插入及分裂操作</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">int</span> 
+<span class="nf">_b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Item</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">b_node_pt</span> <span class="n">parent</span><span class="p">,</span> <span class="n">node2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">mid</span><span class="p">;</span>
+
+    <span class="cm">/* 插入叶子节点 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="cm">/* 分裂节点 */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* 叶子节点分裂 */</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">b_node_new_leaf</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="cm">/* 内部节点分裂 */</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">b_node_new_internal</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node2</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* 拷贝数据 */</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">mid</span><span class="p">];</span>
+        <span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">+</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">memcpy</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">+</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">b_node_pt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="n">mid</span><span class="p">));</span>
+            <span class="cm">/* 重设父指针 */</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+
+        <span class="cm">/* 插入父节点 */</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* 生成新的树根节点 */</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">b_node_new_internal</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+            <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//增加数据和右子树</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">item_cmp</span><span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">key</span><span class="p">,</span> <span class="n">temp</span><span class="p">.</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+        <span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="n">node2</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> 
+<span class="nf">b_tree_insert</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">Item</span> <span class="n">element</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">b_node_new_leaf</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">max</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+    <span class="cm">/* 查找到叶节点 */</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+        <span class="cm">/* </span>
+<span class="cm">         * 如果不允许插入相同 </span>
+<span class="cm">         * 检查ret == 1</span>
+<span class="cm">         */</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="cm">/* </span>
+<span class="cm">     * 如果不允许插入相同 </span>
+<span class="cm">     * 检查ret == 1</span>
+<span class="cm">     */</span>
+    <span class="n">_b_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">element</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Item</span> <span class="o">*</span> 
+<span class="nf">b_tree_search</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_node_left_rotate</span>
+<span class="cm"> * Description:  节点值左旋转，把右节点的第一个值移到父节点，父节点的对应值移到左节点</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_node_left_rotate</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">b_node_pt</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">left</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_node_right_rotate</span>
+<span class="cm"> * Description:  节点值右旋转，把左节点的最后一个值移到父节点，父节点的对应值移到右节点</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_node_right_rotate</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">b_node_pt</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_node_merge</span>
+<span class="cm"> * Description:  合并节点元素的左右两个子节点</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_node_merge</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">b_node_pt</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="cm">/* 修改左子节点 */</span>
+    <span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+
+    <span class="n">memcpy</span><span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">+</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+            <span class="n">left</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">=</span> <span class="n">left</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="n">right</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="cm">/* 修改父节点 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">index</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">--</span><span class="p">;</span>
+
+    <span class="cm">/* 释放右节点 */</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">right</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_tree_delete</span>
+<span class="cm"> * Description:  数据删除</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">parent</span><span class="p">,</span> <span class="n">sibling</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+    <span class="cm">/* 删除叶节点指定值 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">index</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="o">--</span><span class="p">;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&lt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* 寻找当前节点在父节点的位置 */</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">index</span><span class="o">&lt;=</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">!=</span> <span class="n">node</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Didn't find node in parent's children array!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* </span>
+<span class="cm">             * 节点是父第0个子节点，兄弟是第1个子节点</span>
+<span class="cm">             * 中间的分隔元素是父中的第0个元素</span>
+<span class="cm">             * </span>
+<span class="cm">             */</span>
+            <span class="n">sibling</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* 从兄弟迁移数据 */</span>
+                <span class="n">_b_node_left_rotate</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="cm">/* 合并兄弟 */</span>
+                <span class="n">_b_node_merge</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="cm">/* </span>
+<span class="cm">             * 节点是父中第index个子节点，兄弟是第index - 1个子节点</span>
+<span class="cm">             * 中间的分隔元素是父中的第index - 1个元素</span>
+<span class="cm">             * </span>
+<span class="cm">             */</span>
+            <span class="n">sibling</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sibling</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">&gt;</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">min</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* 从兄弟迁移数据 */</span>
+                <span class="n">_b_node_right_rotate</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="cm">/* 合并兄弟 */</span>
+                <span class="n">_b_node_merge</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">b_tree_delete</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="n">KEY</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_pt</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">,</span> <span class="n">node2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 查找到删除数据的节点 */</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">binary_search</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">index</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 在内部节点 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node2</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">node2</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node2</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">_b_tree_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  _b_node_destory</span>
+<span class="cm"> * Description:  节点递归删除</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">_b_node_destory</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_b_node_destory</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">b_tree_destroy</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_b_node_destory</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">b_node_printnode</span><span class="p">(</span><span class="n">Item</span> <span class="o">*</span><span class="n">element</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"    "</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">element</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"*</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"{%d: %d}</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">element</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="n">element</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">b_node_show</span><span class="p">(</span><span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">b_node_show</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">b_node_printnode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">h</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">b_node_show</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">b_tree_print</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">b_node_show</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 打印节点计数变量 */</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">node_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> 
+<span class="nf">export_dot</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">,</span> <span class="n">b_node_pt</span> <span class="n">node</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last_label</span><span class="p">,</span> <span class="kt">int</span> <span class="n">field</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="cm">/* 打印节点 */</span>
+    <span class="kt">char</span> <span class="n">node_name</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="s">"n%d"</span><span class="p">,</span> <span class="n">node_num</span><span class="p">);</span>
+
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s[label=</span><span class="se">\"</span><span class="s">"</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"&lt;f0&gt;"</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">" | %d"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">);</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">" | &lt;f%d&gt;"</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%d"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">key</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">" | %d"</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"</span><span class="se">\"</span><span class="s">];</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">node_num</span><span class="o">++</span><span class="p">;</span>
+
+    <span class="cm">/* 打印边 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_label</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"%s:f%d-&gt;%s;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">last_label</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">node_name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* 打印子节点 */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">keynum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">b_tree_export_dot</span><span class="p">(</span><span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">filename</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">label</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">"w"</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"digraph g{</span><span class="se">\n</span><span class="s">node[shape=record];</span><span class="se">\n</span><span class="s">label=</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">;</span><span class="se">\n</span><span class="s">labeljust=l;</span><span class="se">\n</span><span class="s">labelloc=t;</span><span class="se">\n</span><span class="s">splines=line;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">label</span><span class="p">);</span>
+    <span class="n">export_dot</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s">"}</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cm">/* b_tree.c */</span>
+</pre></div>
+<p>b_tree.c</p>
+<div class="highlight"><pre><span></span><span class="cm">/* b_tree_test.c */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">"b_tree.h"</span><span class="cp"></span>
+
+<span class="cp">#define LENGTH(a) ( (sizeof(a)) / (sizeof(a[0])) )</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="n">b_tree_pt</span> <span class="n">tree</span><span class="p">;</span>
+    <span class="n">Item</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">b_tree_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tree</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== B树中依次添加: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">30</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">b_tree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== B树生成: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">b_tree_print</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+
+    <span class="n">b_tree_export_dot</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s">"btree.dot"</span><span class="p">,</span> <span class="s">"B树生成"</span><span class="p">);</span>
+
+    <span class="n">b_tree_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">28</span><span class="p">);</span>
+    <span class="n">b_tree_delete</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="mi">26</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"== B树删除元素28,26后: </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">b_tree_print</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+    <span class="n">b_tree_export_dot</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s">"btree2.dot"</span><span class="p">,</span> <span class="s">"B树删除后"</span><span class="p">);</span>
+
+    <span class="n">b_tree_destroy</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>b_tree_test.c</p>
+<h3 id="_2"><strong> 测试程序的运行结果 </strong></h3>
+<div class="highlight"><pre><span></span><span class="o">==</span> B树中依次添加:
+
+<span class="o">==</span> B树生成: 
+        <span class="o">{</span>0: 1<span class="o">}</span>
+        <span class="o">{</span>1: 1<span class="o">}</span>
+        <span class="o">{</span>2: 1<span class="o">}</span>
+    <span class="o">{</span>3: 1<span class="o">}</span>
+        <span class="o">{</span>4: 1<span class="o">}</span>
+        <span class="o">{</span>5: 1<span class="o">}</span>
+        <span class="o">{</span>6: 1<span class="o">}</span>
+    <span class="o">{</span>7: 1<span class="o">}</span>
+        <span class="o">{</span>8: 1<span class="o">}</span>
+        <span class="o">{</span>9: 1<span class="o">}</span>
+        <span class="o">{</span>10: 1<span class="o">}</span>
+    <span class="o">{</span>11: 1<span class="o">}</span>
+        <span class="o">{</span>12: 1<span class="o">}</span>
+        <span class="o">{</span>13: 1<span class="o">}</span>
+        <span class="o">{</span>14: 1<span class="o">}</span>
+<span class="o">{</span>15: 1<span class="o">}</span>
+        <span class="o">{</span>16: 1<span class="o">}</span>
+        <span class="o">{</span>17: 1<span class="o">}</span>
+        <span class="o">{</span>18: 1<span class="o">}</span>
+    <span class="o">{</span>19: 1<span class="o">}</span>
+        <span class="o">{</span>20: 1<span class="o">}</span>
+        <span class="o">{</span>21: 1<span class="o">}</span>
+        <span class="o">{</span>22: 1<span class="o">}</span>
+    <span class="o">{</span>23: 1<span class="o">}</span>
+        <span class="o">{</span>24: 1<span class="o">}</span>
+        <span class="o">{</span>25: 1<span class="o">}</span>
+        <span class="o">{</span>26: 1<span class="o">}</span>
+    <span class="o">{</span>27: 1<span class="o">}</span>
+        <span class="o">{</span>28: 1<span class="o">}</span>
+        <span class="o">{</span>29: 1<span class="o">}</span>
+<span class="o">==</span> B树删除元素28,26后: 
+        <span class="o">{</span>0: 1<span class="o">}</span>
+        <span class="o">{</span>1: 1<span class="o">}</span>
+        <span class="o">{</span>2: 1<span class="o">}</span>
+    <span class="o">{</span>3: 1<span class="o">}</span>
+        <span class="o">{</span>4: 1<span class="o">}</span>
+        <span class="o">{</span>5: 1<span class="o">}</span>
+        <span class="o">{</span>6: 1<span class="o">}</span>
+    <span class="o">{</span>7: 1<span class="o">}</span>
+        <span class="o">{</span>8: 1<span class="o">}</span>
+        <span class="o">{</span>9: 1<span class="o">}</span>
+        <span class="o">{</span>10: 1<span class="o">}</span>
+    <span class="o">{</span>11: 1<span class="o">}</span>
+        <span class="o">{</span>12: 1<span class="o">}</span>
+        <span class="o">{</span>13: 1<span class="o">}</span>
+        <span class="o">{</span>14: 1<span class="o">}</span>
+<span class="o">{</span>15: 1<span class="o">}</span>
+        <span class="o">{</span>16: 1<span class="o">}</span>
+        <span class="o">{</span>17: 1<span class="o">}</span>
+        <span class="o">{</span>18: 1<span class="o">}</span>
+    <span class="o">{</span>19: 1<span class="o">}</span>
+        <span class="o">{</span>20: 1<span class="o">}</span>
+        <span class="o">{</span>21: 1<span class="o">}</span>
+        <span class="o">{</span>22: 1<span class="o">}</span>
+    <span class="o">{</span>23: 1<span class="o">}</span>
+        <span class="o">{</span>24: 1<span class="o">}</span>
+        <span class="o">{</span>25: 1<span class="o">}</span>
+        <span class="o">{</span>27: 1<span class="o">}</span>
+        <span class="o">{</span>29: 1<span class="o">}</span>
+</pre></div>
+<p>最后生成dot标记文件，然后使用工具可以生成下图</p>
+<p><img alt="图一" src="/images/b_tree/btree.png"/></p>
+<p><img alt="图二" src="/images/b_tree/btree2.png"/></p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-12-11(星期日) 02:03  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>
