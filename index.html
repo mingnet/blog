@@ -108,6 +108,22 @@
         <div class="medium-9 small-12 columns" role="content">
 
 <article>
+	<h3><a href="/bplus-tree-algorithm-in-c.html">B+树的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-12-18(星期日) 21:36  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>B+树可以看作是B树的一种变形，通常用于数据库和操作系统的文件系统中。</p>
+<p>B+树的定义基本与B树相同。区别如下。</p>
+<ol>
+<li>非叶子结点的子树指针与关键字个数相同</li>
+<li>非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树（B-树是开区间）</li>
+<li>为所有叶子结点增加一个链指针</li>
+<li>所有关键字都在叶子结点出现</li>
+</ol>
+<p>插入删除操作与B树有些区别 ...</p>
+		<p class="continue"><a href="/bplus-tree-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
 	<h3><a href="/b-tree-algorithm-in-c.html">B树的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-12-11(星期日) 02:03  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
 	
@@ -237,14 +253,6 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
 		<p class="continue"><a href="/skew-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
-<article>
-	<h3><a href="/leftist-heap-algorithm-in-c.html">左倾堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-24(星期六) 13:47  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>左倾堆(leftist tree 或 leftist heap)又称为左式堆，左偏树，左偏堆，最左堆等。左倾堆是优先队列的一种实现方式，当优先队列需要解决“两个优先队列合并”的问题时，二叉堆的效率就比较差了，这时左倾堆等方式可以很好的解决这类问题。左倾堆合并时间复杂度为O(lgn)。左倾堆在统计问题，最值问题 ...</p>
-		<p class="continue"><a href="/leftist-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
 
 <div class="row" style="margin-bottom: -1.25em;">
 	<div class="small-12 columns text-center">
@@ -266,7 +274,7 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">12</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">13</span></a></li>
                 </ul>
             </div>
 
