@@ -57,8 +57,8 @@
                                                                                                           
 							<li ><a href="/pages/about.html">About</a></li>
 						<li><label>Categories</label></li>
-							<li ><a href="/category/ji-he-suan-fa.html">几何算法</a></li>
-							<li class="active"><a href="/category/suan-fa.html">算法</a></li>
+							<li class="active"><a href="/category/ji-he-suan-fa.html">几何算法</a></li>
+							<li ><a href="/category/suan-fa.html">算法</a></li>
                         <!--
 						<li><label>Links</label></li>
 							<li><a href="http://coolshell.cn">酷 壳</a></li>
@@ -112,67 +112,31 @@
                 <ul class="breadcrumbs">
                   <li class="unavailable"><a href="#">清风明月的笔记</a></li>
                   <li><a href="/">Home</a></li>
-                  <li class="current"><a href="#">算法</a></li>
+                  <li class="current"><a href="#">几何算法</a></li>
                 </ul>
             </div>
 
 
 <article>
-	<h3><a href="/skew-heap-algorithm-in-c.html">斜堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-25(星期日) 21:16  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	<h3><a href="/graham-scan-get-convex.html">Graham扫描法求凸包</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2017-03-11(星期六) 18:42  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/ji-he-suan-fa.html">几何算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/ji-he-suan-fa-suan-fa.html">几何算法，算法</a>, </h6>
 	
-<p>斜堆(skew heap)是左倾堆的一个变种，与左倾堆一样，合并的时间复杂度也是O(lgn)。相对于左倾堆来说，斜堆没有零距离这个概念，而是在合并操作的时候，每次交换左右子树。</p>
-<p>斜堆的定义</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="o">*</span><span class="n">skew_heap_pt</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="p">{</span>  
-    <span class="n">skew_heap_pt ...</span></pre></div>
-		<p class="continue"><a href="/skew-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
-<article>
-	<h3><a href="/leftist-heap-algorithm-in-c.html">左倾堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-24(星期六) 13:47  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>左倾堆(leftist tree 或 leftist heap)又称为左式堆，左偏树，左偏堆，最左堆等。左倾堆是优先队列的一种实现方式，当优先队列需要解决“两个优先队列合并”的问题时，二叉堆的效率就比较差了，这时左倾堆等方式可以很好的解决这类问题。左倾堆合并时间复杂度为O(lgn)。左倾堆在统计问题，最值问题 ...</p>
-		<p class="continue"><a href="/leftist-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
-<article>
-	<h3><a href="/d-heap-algorithm-in-c.html">D堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-23(星期五) 19:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>D堆是二叉堆的简单推广，跟二叉堆的区别是所有的节点都有d个儿子，代码也跟二叉堆的相似。下图表示一个D=3的最小D堆。</p>
-<p><img alt="图" src="/images/d_heap/heap.png"/></p>
-<p>D堆插入操作的时间改进为O(log(d,N)),然面删除操作要花费较大时间，一般需要O(d*log(d,N))。如果D不是2的幂，也不能通过二进制移位来实现乘法和除法，这样也大大增加运行时间。
-大部分时候总是使用二叉堆，但D堆也在一些情况下使用 ...</p>
-		<p class="continue"><a href="/d-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
-<article>
-	<h3><a href="/binary-heap-algorithm-in-c.html">二叉堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-07-04(星期一) 23:13  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>堆是一颗完全树，同时满足每个节点均大于或小于它的子节点，这样的数据结构被称为最大堆或者最小堆。
-这种结构处于一种半排序状态，它的存取效率从整体上讲介于有序和无序之间。当对象处于动态时，是种非常有优势的数据结构。存取的时间复杂为log(a,n),其中a为完全树的度。</p>
-<p>通常二叉堆以数组存储，层为 log(2,n)，可以使用以下的代码来定义二叉堆结构。</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">binary_heap_s ...</span></pre></div>
-		<p class="continue"><a href="/binary-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+<p>凸包用不严谨的话来讲，给定二维平面上的点集，凸包就是将最外层的点连接起来构成的凸多边型，它能包含点集中所有的点。</p>
+<p>如下图(图片来看网络)：</p>
+<p><img alt="图一" src="/images/grahamscan/grahamscan1.png"/></p>
+<p>算法的主要方法是先排序，然后扫描。</p>
+<h4 id="_1"><strong> 点集排序 </strong></h4>
+<ol>
+<li>选取基点。选择所有点中y坐标最小的点，如果多个点都是最小值，选x坐标最小的点。</li>
+<li>剩下的点按与基点构成的向量进行排序。计算向量与x轴的夹角大小来排序，可以使用两个向量叉积来判断第二个向量在第一个向量的左边还是右边。只求向量z轴上的值来判断方向即可。</li>
+</ol>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  getdist ...</span></pre></div>
+		<p class="continue"><a href="/graham-scan-get-convex.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
 
-<div class="row" style="margin-bottom: -1.25em;">
-	<div class="small-12 columns text-center">
-		<div class="pagination-centered">
-			<ul class="pagination">
-				<li class="arrow"><a href="/category/suan-fa.html">&larr; Previous</a></li>
-				<li class=""><a href="/category/suan-fa.html">1</a></li>
-				<li class="current"><a href="/category/suan-fa2.html">2</a></li>
-				<li class="arrow unavailable"><a href="#">&rarr; Next</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
 
         </div>
         <!-- End Main Content -->

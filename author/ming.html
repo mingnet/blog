@@ -57,6 +57,7 @@
                                                                                                           
 							<li ><a href="/pages/about.html">About</a></li>
 						<li><label>Categories</label></li>
+							<li ><a href="/category/ji-he-suan-fa.html">几何算法</a></li>
 							<li ><a href="/category/suan-fa.html">算法</a></li>
                         <!--
 						<li><label>Links</label></li>
@@ -107,6 +108,40 @@
         <!-- Main Content -->
         <div class="medium-9 small-12 columns" role="content">
 
+<article>
+	<h3><a href="/graham-scan-get-convex.html">Graham扫描法求凸包</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2017-03-11(星期六) 18:42  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/ji-he-suan-fa.html">几何算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/ji-he-suan-fa-suan-fa.html">几何算法，算法</a>, </h6>
+	
+<p>凸包用不严谨的话来讲，给定二维平面上的点集，凸包就是将最外层的点连接起来构成的凸多边型，它能包含点集中所有的点。</p>
+<p>如下图(图片来看网络)：</p>
+<p><img alt="图一" src="/images/grahamscan/grahamscan1.png"/></p>
+<p>算法的主要方法是先排序，然后扫描。</p>
+<h4 id="_1"><strong> 点集排序 </strong></h4>
+<ol>
+<li>选取基点。选择所有点中y坐标最小的点，如果多个点都是最小值，选x坐标最小的点。</li>
+<li>剩下的点按与基点构成的向量进行排序。计算向量与x轴的夹角大小来排序，可以使用两个向量叉积来判断第二个向量在第一个向量的左边还是右边。只求向量z轴上的值来判断方向即可。</li>
+</ol>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> *        Name:  getdist ...</span></pre></div>
+		<p class="continue"><a href="/graham-scan-get-convex.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
+<article>
+	<h3><a href="/r-tree-algorithm-in-c.html">R树的C语言实现</a></h3>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2017-01-06(星期五) 20:51  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
+	
+<p>删除采用重新插入的算法。</p>
+<p>B树是2-3-4树的延伸，或者说2-3-4树是B树的一种情况。</p>
+<p>所以B树的基本操作与2-3-4树相同。2-3-4树其实还是挺重要的一种数据结构，理解2-3-4树更理解了B树和红黑树。前两篇文章作2-3-4树分析时画过图，B树便不再画了，画图其实挺累的。</p>
+<p>B树的查询，插入，删除的时间复杂度都是O(lgn)</p>
+<p>B树的定义：</p>
+<ol>
+<li>每个节点最多有m个元素(m + 1个孩子)</li>
+<li>每个非叶节点(除根节点)有最少m ...</li></ol>
+		<p class="continue"><a href="/r-tree-algorithm-in-c.html">阅读全文 &raquo;</a></p>
+</article>
+<hr />
 <article>
 	<h3><a href="/bplus-tree-algorithm-in-c.html">B+树的C语言实现</a></h3>
     <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-12-18(星期日) 21:36  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
@@ -222,37 +257,6 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
 		<p class="continue"><a href="/fibonacci-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
 </article>
 <hr />
-<article>
-	<h3><a href="/binomial-heap-algorithm-in-c.html">二项堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-10-01(星期六) 16:41  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>二项堆是一种比较复杂的堆结构，这种数据结构在"算法-c语言实现(第3版)"中有讲解，可惜这本书实在把二项堆说得云山雾罩。</p>
-<p>二项堆是二项树的集合。下面先说明二项树再说明二项堆及其各种操作。</p>
-<h3 id="_1"><strong> 二项树 </strong></h3>
-<p>二项树是一种递归定义的树，它的定义如下：</p>
-<ol>
-<li>二项树B0只有一个节点。</li>
-<li>二项树Bk由两棵二项树B(K-1)组成，其中一棵树是另一棵树的最左孩子。</li>
-</ol>
-<p>如下图所示：</p>
-<p><img alt="图一" src="/images/binomial_heap/tree.png"/></p>
-<p>上图的B0,B1,B2 ...</p>
-		<p class="continue"><a href="/binomial-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
-<article>
-	<h3><a href="/skew-heap-algorithm-in-c.html">斜堆的C语言实现</a></h3>
-    <h6 class="subheader"><span class="label secondary radius">Date</span> 2016-09-25(星期日) 21:16  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/suan-fa.html">算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/suan-fa.html">算法</a>, </h6>
-	
-<p>斜堆(skew heap)是左倾堆的一个变种，与左倾堆一样，合并的时间复杂度也是O(lgn)。相对于左倾堆来说，斜堆没有零距离这个概念，而是在合并操作的时候，每次交换左右子树。</p>
-<p>斜堆的定义</p>
-<div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="o">*</span><span class="n">skew_heap_pt</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">skew_heap_s</span> <span class="p">{</span>  
-    <span class="n">skew_heap_pt ...</span></pre></div>
-		<p class="continue"><a href="/skew-heap-algorithm-in-c.html">阅读全文 &raquo;</a></p>
-</article>
-<hr />
 
 <div class="row" style="margin-bottom: -1.25em;">
 	<div class="small-12 columns text-center">
@@ -274,13 +278,15 @@ AVL树的查找，插入，和删除在平均和最坏情况下都是O(log(n))�
             <div class="panel radius">
                 <h5>Categories</h5>
                 <ul class="side-nav">
-                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">13</span></a></li>
+                        <li><a href="/category/ji-he-suan-fa.html">几何算法 <span class="label secondary round">1</span></a></li>
+                        <li><a href="/category/suan-fa.html">算法 <span class="label secondary round">14</span></a></li>
                 </ul>
             </div>
 
             <div class="panel radius">
                 <h5>Tags</h5>
                 <ul class="tag-cloud">
+                    <li class="label info round"><a href="/tag/ji-he-suan-fa-suan-fa.html">几何算法，算法</a></li>
                     <li class="label info round"><a href="/tag/suan-fa.html">算法</a></li>
                 </ul>
             </div>
