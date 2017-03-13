@@ -193,6 +193,7 @@
     <span class="n">vectorsort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">last</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
+<p>取基点那一部分在下面的代码中。</p>
 <h4 id="_2"><strong> 点集扫描 </strong></h4>
 <p>基点是必然在凸包上的。除基点外，逆时针进行计算，每相邻两个点(A,B)与上一个点(T)构成的两个向量(TA,TB)使用叉积计算旋转方向。后面那个向量(TB)必须在前面向量(TA)的左边。如果TB在TA右边，说明TA不在凸包上。只求向量z轴上的值来判断方向即可。注意跳过相同的点。</p>
 <p>如下图(图片来看网络)：</p>
@@ -235,7 +236,7 @@
         <span class="p">}</span>
         <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
     <span class="p">}</span>
-    <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">top</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 <h3 id="_3"><strong> 完整源码 </strong></h3>
@@ -396,8 +397,7 @@
     <span class="n">POINT</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">},{</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">},{</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">},{</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">},{</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">}};</span>
     <span class="n">length</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">POINT</span><span class="p">);</span>
     <span class="n">getconvex</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"This lenght of convex border is %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">printf</span><span class="p">(</span><span class="s">"[%f, %f] "</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>

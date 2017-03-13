@@ -1,0 +1,576 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>清风明月的笔记</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ming">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/normalize.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/solarized-dark.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap" data-offcanvas>
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">清风明月的笔记</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+                                                                                                          
+							<li ><a href="/pages/contact.html">Contact</a></li>
+                                                                                                          
+							<li ><a href="/pages/about.html">About</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/ji-he-suan-fa.html">几何算法</a></li>
+							<li ><a href="/category/suan-fa.html">算法</a></li>
+                        <!--
+						<li><label>Links</label></li>
+							<li><a href="http://coolshell.cn">酷 壳</a></li>
+							<li><a href="http://blog.codingnow.com">云风的 BLOG</a></li>
+							<li><a href="http://www.ruanyifeng.com/blog">阮一峰的网络日志</a></li>
+                        -->
+
+
+
+                        <!--
+						<li><label>Social</label></li>
+							<li><a href="#"></a></li>
+                        -->
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">清风明月的笔记</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li><a href="/">Home</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/contact.html">Contact</a></li>                                    
+                                                                                                                                          
+                                                                                                          
+····                                                                                                                                       
+                                     <li><a href="/pages/about.html">About</a></li>                                    
+                                                                                                                                          
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row main-content">
+<ul class="breadcrumbs">
+  <li class="unavailable"><a href="#">清风明月的笔记</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/category/ji-he-suan-fa.html">几何算法</a></li>
+</ul>
+<article>
+	<h2>旋转卡壳求点集的最小面积外接矩形</h2>
+        <div class="toc">
+<ul>
+<li><a href="#_1">算法的历史</a></li>
+<li><a href="#_2">算法的过程</a></li>
+<li><a href="#_3">完整源码</a></li>
+</ul>
+</div>
+	
+<h4 id="_1"><strong> 算法的历史 </strong></h4>
+<p>先转摘一段网上关于旋转卡壳算法的历史</p>
+<p>1978年， M.I. Shamos's Ph.D. 的论文"Computational Geometry"标志着计算机科学的这一领域的诞生。 当时他发表成果的是一个寻找凸多边形直径的一个非常简单的算法， 即根据多边形的一对点距离的最大值来确定。 
+后来直径演化为由一对对踵点对来确定。 Shamos提出了一个简单的 O(n) 时间的算法来确定一个凸 n 角形的对踵点对。 因为他们最多只有 3n/2 对， 直径可以在 O(n) 时间内算出。 
+如同Toussaint后来提出的， Shamos的算法就像绕着多边形旋转一对卡壳。 因此就有了术语“旋转卡壳”。 1983年， Toussaint发表了一篇论文， 其中用同样的技术来解决许多问题。 从此， 基于此模型的新算法就确立了， 解决了许多问题。 </p>
+<p>他们包括： </p>
+<ol>
+<li>计算距离<ul>
+<li>凸多边形直径</li>
+<li>凸多边形宽</li>
+<li>凸多边形间最大距离</li>
+<li>凸多边形间最小距离</li>
+</ul>
+</li>
+<li>外接矩形<ul>
+<li>最小面积外接矩形</li>
+<li>最小周长外接矩形</li>
+</ul>
+</li>
+<li>三角剖分<ul>
+<li>洋葱三角剖分</li>
+<li>螺旋三角剖分</li>
+</ul>
+</li>
+<li>四边形剖分<ul>
+<li>凸多边形属性</li>
+<li>合并凸包</li>
+<li>找共切线</li>
+<li>凸多边形交</li>
+<li>临界切线</li>
+<li>凸多边形矢量和</li>
+</ul>
+</li>
+<li>最薄截面<ul>
+<li>最薄横截带</li>
+</ul>
+</li>
+</ol>
+<h4 id="_2"><strong> 算法的过程 </strong></h4>
+<p>旋转卡壳是几何计算中非常重要的算法。这是仅用于实现计算点集的最小面积外接矩形。</p>
+<p>求点集的外接矩形需要使用到凸包。有一个很重要的结论，最小覆盖矩形必有一条边和凸包的一条边重合。</p>
+<p>算法的步骤如下：</p>
+<ol>
+<li>
+<p>计算点集的凸包</p>
+</li>
+<li>
+<p>从一条边开始旋转扫描，使用旋转卡壳逆时针求其余三条边的点。求值顺序是下-&gt;右-&gt;上-&gt;左。</p>
+<ul>
+<li>右顶点可以使用点积求出。很明显|a||b|cosθ的值最大时为右顶点。即向量a在b上的投影最长的时候。</li>
+<li>上顶点可以使用叉积求出。叉积可以表示两个向量的平行四边形面积。当这两个向量构成的平行四边形面积最大时，即是上顶点。</li>
+<li>左顶点跟右顶点一样，也可以使用点积求出。但是左顶点的值应该是投影最小的时候。</li>
+</ul>
+</li>
+<li>
+<p>计算外接矩形的面积</p>
+</li>
+<li>
+<p>返回2直接遍历所有边</p>
+</li>
+</ol>
+<p><strong> 矩形面积计算方法 </strong></p>
+<p>假设有如下图所求ABCDEF的凸包。</p>
+<p><img alt="图一" src="/images/rotating_calipers/rotatingcalipers1.png"/></p>
+<p>设当前扫描的边为AB，可以得到下点：A，右点:C，上点：E，左点: F</p>
+<p>1、可以通过叉积计算出矩形的高EG</p>
+<p>设S为AE和AB的叉积，所以S即是这两边构成的平行四边形面积</p>
+<p>S = AB*EG</p>
+<p>EG = S/AB</p>
+<p>2、通过如下图所示过程可以计算出矩形的长CH</p>
+<p><img alt="图一" src="/images/rotating_calipers/rotatingcalipers2.png"/></p>
+<p><img alt="图一" src="/images/rotating_calipers/math.png"/></p>
+<p>3、矩形面积 = EG*CH</p>
+<p>代码如下</p>
+<div class="highlight"><pre><span></span><span class="kt">void</span> 
+<span class="nf">rotatingcalipers</span><span class="p">(</span><span class="n">POINT</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="n">POINT</span> <span class="o">*</span><span class="n">rectangle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">top</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">downlast</span><span class="p">,</span> <span class="n">rightlast</span><span class="p">,</span> <span class="n">uplast</span><span class="p">,</span> <span class="n">leftlast</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">area</span> <span class="o">=</span> <span class="n">FLT_MAX</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">POINT</span> <span class="n">temp</span><span class="p">;</span>
+
+    <span class="n">getconvex</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">top</span><span class="p">);</span>
+    <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">down</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">down</span><span class="o">&lt;</span><span class="n">top</span><span class="p">;</span> <span class="n">down</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// find right</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// find up</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">down</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="n">up</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// find down</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">down</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">up</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">getdist</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="p">])</span><span class="o">/</span><span class="n">dist</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">area</span> <span class="o">&gt;</span> <span class="n">X</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">X</span><span class="o">*</span><span class="n">Y</span><span class="p">;</span>
+            <span class="n">downlast</span> <span class="o">=</span> <span class="n">down</span><span class="p">;</span>
+            <span class="n">rightlast</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+            <span class="n">uplast</span> <span class="o">=</span> <span class="n">up</span><span class="p">;</span>
+            <span class="n">leftlast</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 计算外接矩形</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">==</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">==</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">);</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h3 id="_3"><strong> 完整源码 </strong></h3>
+<div class="highlight"><pre><span></span><span class="cm">/* rotatingcalipers.c */</span>
+<span class="cm">/*</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> *</span>
+<span class="cm"> *       Filename:  rotatingcalipers.c</span>
+<span class="cm"> *</span>
+<span class="cm"> *    Description:  旋转卡壳计算最小面积矩形</span>
+<span class="cm"> *</span>
+<span class="cm"> *        Version:  1.0</span>
+<span class="cm"> *        Created:  2017-03-12 21:52</span>
+<span class="cm"> *       Revision:  none</span>
+<span class="cm"> *       Compiler:  gcc</span>
+<span class="cm"> *</span>
+<span class="cm"> *         Author:  simon</span>
+<span class="cm"> *</span>
+<span class="cm"> * =====================================================================================</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;float.h&gt;</span><span class="cp"></span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">point_s</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">POINT</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span>
+<span class="nf">swap</span><span class="p">(</span><span class="n">POINT</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">POINT</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+    <span class="n">arr</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+    <span class="n">arr</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  getdist</span>
+<span class="cm"> * Description:  计算两点间的距离</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">float</span> 
+<span class="nf">getdist</span><span class="p">(</span><span class="n">POINT</span> <span class="n">p1</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">((</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  getcross</span>
+<span class="cm"> * Description:  计算叉积z方向的值，用于判断两个向量的转向</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">float</span> 
+<span class="nf">getcross</span><span class="p">(</span><span class="n">POINT</span> <span class="n">p0</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p1</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  getpod</span>
+<span class="cm"> * Description:  计算两个向量的点积</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">float</span> 
+<span class="nf">getdot</span><span class="p">(</span><span class="n">POINT</span> <span class="n">p0</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p1</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  anglecmp</span>
+<span class="cm"> * Description:  比较两个向量的逆时针转角方向，p1大于p2时返回大于0，等于时返回等于0</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">float</span>
+<span class="nf">anglecmp</span><span class="p">(</span><span class="n">POINT</span> <span class="n">p0</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p1</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">float</span> <span class="n">cross</span> <span class="o">=</span> <span class="n">getcross</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cross</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">getdist</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span> <span class="o">-</span> <span class="n">getdist</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">cross</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  vectorsort</span>
+<span class="cm"> * Description:  根据基点进行向量排序, 快速排序递归实现</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="k">static</span> <span class="kt">void</span>
+<span class="nf">vectorsort</span><span class="p">(</span><span class="n">POINT</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">last</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">right</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">anglecmp</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">++</span><span class="n">last</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+    <span class="n">vectorsort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">last</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">vectorsort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">last</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* </span>
+<span class="cm"> *        Name:  getconvex</span>
+<span class="cm"> * Description:  计算凸包</span>
+<span class="cm"> * </span>
+<span class="cm"> */</span>
+<span class="kt">void</span>
+<span class="nf">getconvex</span><span class="p">(</span><span class="n">POINT</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">top</span><span class="p">;</span>
+
+    <span class="cm">/* 小于4个点的不计算凸包 */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="cm">/* 计算基点，交换到0位置 */</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">==</span> <span class="n">arr</span><span class="p">[</span><span class="n">base</span><span class="p">].</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">base</span><span class="p">].</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">base</span><span class="p">].</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="cm">/* 排序 */</span>
+    <span class="n">vectorsort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="cm">/* 计算凸包 */</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">top</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">top</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">top</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">top</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">top</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> 
+<span class="nf">rotatingcalipers</span><span class="p">(</span><span class="n">POINT</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="n">POINT</span> <span class="o">*</span><span class="n">rectangle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">top</span><span class="p">,</span> <span class="n">down</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">downlast</span><span class="p">,</span> <span class="n">rightlast</span><span class="p">,</span> <span class="n">uplast</span><span class="p">,</span> <span class="n">leftlast</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">area</span> <span class="o">=</span> <span class="n">FLT_MAX</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">POINT</span> <span class="n">temp</span><span class="p">;</span>
+
+    <span class="n">getconvex</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">top</span><span class="p">);</span>
+    <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">down</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">down</span><span class="o">&lt;</span><span class="n">top</span><span class="p">;</span> <span class="n">down</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// find right</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// find up</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">down</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="n">up</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// find down</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">down</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">up</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">getdist</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">getcross</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">up</span><span class="p">])</span><span class="o">/</span><span class="n">dist</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">getdot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">down</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">down</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">area</span> <span class="o">&gt;</span> <span class="n">X</span><span class="o">*</span><span class="n">Y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">X</span><span class="o">*</span><span class="n">Y</span><span class="p">;</span>
+            <span class="n">downlast</span> <span class="o">=</span> <span class="n">down</span><span class="p">;</span>
+            <span class="n">rightlast</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+            <span class="n">uplast</span> <span class="o">=</span> <span class="n">up</span><span class="p">;</span>
+            <span class="n">leftlast</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 计算外接矩形</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">==</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">==</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">);</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">downlast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">rightlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">leftlast</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+        <span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">rectangle</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">k</span><span class="o">*</span><span class="n">arr</span><span class="p">[</span><span class="n">uplast</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span>
+<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">length</span><span class="p">;</span>
+    <span class="n">POINT</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">},{</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">},{</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">},{</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">},{</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">}};</span>
+    <span class="n">POINT</span> <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">POINT</span><span class="p">);</span>
+    <span class="n">rotatingcalipers</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"[%f, %f] "</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>rotatingcalipers.c</p>
+    <p>转载文章请注明出处： http://mingnote.com</p>
+	<hr/>
+    <h6 class="subheader"><span class="label secondary radius">Date</span> 2017-03-12(星期日) 21:56  <span class="label secondary radius">By</span> <a href="/author/ming.html">Ming</a>    <span class="label secondary radius">In</span> <a href="/category/ji-he-suan-fa.html">几何算法</a> <span class="label secondary radius">Tags</span> <a href="/tag/ji-he-suan-fa-suan-fa.html">几何算法，算法</a>, </h6>
+</article>
+
+						<!-- Main Content -->
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/vendor/jquery.js"></script>
+		<script src="/theme/js/vendor/modernizr.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>
